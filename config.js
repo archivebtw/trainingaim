@@ -1,6 +1,14 @@
 window.AIM_CONFIG = {
-  // Вставь данные проекта Supabase, чтобы включить общий онлайн-рейтинг.
-  // Эти значения можно использовать на GitHub Pages. Никогда не вставляй service_role key.
+  // Публичные данные проекта Supabase для онлайн-рейтинга.
+  // Никогда не добавляй сюда secret или service_role key.
   supabaseUrl: "https://edadwxggqqjugldngfll.supabase.co",
   supabaseAnonKey: "sb_publishable_mOwditWAOlsz5Xq32b2g8g_6goNvfz0"
 };
+
+// index.html загружает этот файл с defer, поэтому первая проверка рейтинга
+// может пройти раньше конфигурации. После загрузки повторно запрашиваем топ.
+window.setTimeout(() => {
+  if (typeof window.loadScores === "function") {
+    window.loadScores();
+  }
+}, 0);
