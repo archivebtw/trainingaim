@@ -3,31 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#080a12" />
-  <title>IQ TEST — by @archivebtw</title>
+  <meta name="theme-color" content="#08090f" />
+  <title>ОБЩЕСТВО П — Кликер</title>
   <style>
     :root {
-      --bg: #070810;
-      --card: rgba(15, 18, 33, 0.78);
-      --card-strong: rgba(20, 24, 43, 0.96);
-      --text: #f7f8ff;
-      --muted: #9da5bf;
-      --line: rgba(255, 255, 255, 0.09);
-      --accent: #8b5cf6;
-      --accent-2: #22d3ee;
-      --success: #34d399;
+      --bg: #07080d;
+      --panel: rgba(18, 20, 30, .84);
+      --panel-strong: rgba(25, 28, 41, .96);
+      --text: #f8f8fb;
+      --muted: #9ca3b7;
+      --line: rgba(255,255,255,.09);
+      --accent: #f59e0b;
+      --accent-2: #ef4444;
+      --success: #22c55e;
       --danger: #fb7185;
-      --shadow: 0 32px 90px rgba(0, 0, 0, 0.46);
+      --shadow: 0 30px 90px rgba(0,0,0,.5);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      min-height: 100%;
-      background: var(--bg);
-    }
+    html { min-height: 100%; background: var(--bg); }
 
     body {
       margin: 0;
@@ -36,9 +31,9 @@
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 30%),
-        radial-gradient(circle at 85% 75%, rgba(34, 211, 238, 0.13), transparent 28%),
-        linear-gradient(145deg, #05060b 0%, #090b16 48%, #05060b 100%);
+        radial-gradient(circle at 16% 18%, rgba(245,158,11,.17), transparent 28%),
+        radial-gradient(circle at 84% 76%, rgba(239,68,68,.15), transparent 30%),
+        linear-gradient(145deg, #05060a 0%, #0b0d16 50%, #05060a 100%);
     }
 
     body::before {
@@ -46,46 +41,36 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.22;
+      opacity: .22;
       background-image:
         linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
       background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black, transparent 80%);
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
     }
 
-    .orb {
+    .glow {
       position: fixed;
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.18;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      filter: blur(100px);
+      opacity: .17;
       pointer-events: none;
-      animation: drift 12s ease-in-out infinite alternate;
+      animation: drift 11s ease-in-out infinite alternate;
     }
 
-    .orb.one {
-      left: -120px;
-      top: -100px;
-      background: var(--accent);
-    }
-
-    .orb.two {
-      right: -130px;
-      bottom: -120px;
-      background: var(--accent-2);
-      animation-delay: -5s;
-    }
+    .glow.one { left: -150px; top: -130px; background: var(--accent); }
+    .glow.two { right: -150px; bottom: -130px; background: var(--accent-2); animation-delay: -4s; }
 
     @keyframes drift {
-      to { transform: translate3d(38px, 26px, 0) scale(1.12); }
+      to { transform: translate3d(36px, 28px, 0) scale(1.1); }
     }
 
-    .page {
-      width: min(1120px, calc(100% - 32px));
-      min-height: 100vh;
+    .app {
+      width: min(1240px, calc(100% - 28px));
       margin: 0 auto;
+      min-height: 100vh;
       display: grid;
       grid-template-rows: auto 1fr auto;
       position: relative;
@@ -96,848 +81,971 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 28px 0 18px;
+      gap: 16px;
+      padding: 24px 0 16px;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
+      font-weight: 950;
+      letter-spacing: -.04em;
       font-size: 20px;
     }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: grid;
       place-items: center;
-      border-radius: 12px;
-      background:
-        linear-gradient(135deg, rgba(139,92,246,.95), rgba(34,211,238,.88));
-      box-shadow: 0 10px 30px rgba(139,92,246,.28);
+      border-radius: 13px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      box-shadow: 0 12px 30px rgba(245,158,11,.24);
+      font-weight: 950;
+      color: #fff;
     }
 
-    .brand-mark svg {
-      width: 21px;
-      height: 21px;
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .header-badge {
-      padding: 9px 13px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+    .icon-btn {
       border: 1px solid var(--line);
-      border-radius: 999px;
+      color: #d5d8e4;
       background: rgba(255,255,255,.035);
-      backdrop-filter: blur(16px);
+      border-radius: 12px;
+      padding: 10px 13px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .18s ease, background .18s ease;
     }
+
+    .icon-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.07); }
 
     main {
+      padding: 18px 0 36px;
       display: grid;
-      place-items: center;
-      padding: 30px 0 46px;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
+      gap: 20px;
+      align-items: stretch;
     }
 
-    .quiz-shell {
-      width: min(760px, 100%);
+    .panel {
       border: 1px solid var(--line);
-      border-radius: 30px;
-      background: linear-gradient(160deg, rgba(24, 28, 48, .84), rgba(10, 12, 23, .9));
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(25,28,42,.86), rgba(11,13,22,.91));
       box-shadow: var(--shadow);
       backdrop-filter: blur(24px);
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
 
-    .quiz-shell::after {
+    .panel::after {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
-      border-radius: inherit;
-      background: linear-gradient(125deg, rgba(255,255,255,.07), transparent 24%);
+      background: linear-gradient(125deg, rgba(255,255,255,.06), transparent 22%);
     }
 
-    .top-line {
-      height: 3px;
-      background: rgba(255,255,255,.07);
+    .game-panel {
+      min-height: 650px;
+      padding: clamp(22px, 4vw, 44px);
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      z-index: 1;
     }
 
-    .top-line-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      box-shadow: 0 0 18px rgba(34, 211, 238, .35);
-      transition: width .45s cubic-bezier(.2,.8,.2,1);
-    }
-
-    .content {
-      padding: clamp(24px, 5vw, 48px);
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
       position: relative;
       z-index: 2;
     }
 
-    .screen {
-      display: none;
-      animation: reveal .45s ease both;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    @keyframes reveal {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: #b9c1da;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    h1, h2 {
-      margin: 0;
-      letter-spacing: -.055em;
-      line-height: .98;
-    }
-
-    h1 {
-      font-size: clamp(46px, 9vw, 82px);
-      max-width: 650px;
-    }
-
-    h2 {
-      font-size: clamp(30px, 5vw, 48px);
-      line-height: 1.05;
-    }
-
-    .gradient-text {
-      background: linear-gradient(100deg, #ffffff 0%, #bba8ff 48%, #61e7ff 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .intro-text {
-      max-width: 590px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: clamp(15px, 2vw, 18px);
-      line-height: 1.65;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 28px 0 34px;
-    }
-
-    .meta-chip {
-      padding: 10px 13px;
-      color: #cbd1e5;
-      font-size: 13px;
-      font-weight: 750;
+    .stat-card {
+      padding: 14px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 16px;
       background: rgba(255,255,255,.035);
     }
 
-    button {
-      font: inherit;
-    }
-
-    .primary-btn {
-      width: 100%;
-      min-height: 58px;
-      border: 0;
-      border-radius: 17px;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: .02em;
-      cursor: pointer;
-      background: linear-gradient(100deg, #7c3aed, #8b5cf6 42%, #0891b2);
-      box-shadow: 0 18px 40px rgba(124, 58, 237, .26);
-      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-    }
-
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 48px rgba(124, 58, 237, .34);
-      filter: brightness(1.08);
-    }
-
-    .primary-btn:active {
-      transform: translateY(0);
-    }
-
-    .quiz-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .counter {
+    .stat-card span {
+      display: block;
       color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .stat-card strong {
+      font-size: clamp(17px, 2vw, 23px);
+      letter-spacing: -.03em;
+    }
+
+    .level-wrap {
+      margin-top: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .level-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .level-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+    }
+
+    .level-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(245,158,11,.3);
+      transition: width .25s ease;
+    }
+
+    .click-zone {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      min-height: 360px;
+      position: relative;
+      z-index: 2;
+      isolation: isolate;
+    }
+
+    .click-zone::before {
+      content: "";
+      position: absolute;
+      width: min(430px, 78vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(245,158,11,.15), rgba(239,68,68,.06) 45%, transparent 68%);
+      filter: blur(3px);
+      z-index: -1;
+      animation: breathe 3.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      50% { transform: scale(1.08); opacity: .82; }
+    }
+
+    .click-button {
+      width: min(520px, 92%);
+      min-height: 190px;
+      padding: 28px 24px;
+      border: 1px solid rgba(245,158,11,.34);
+      border-radius: 34px;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      background:
+        radial-gradient(circle at 30% 18%, rgba(255,255,255,.15), transparent 32%),
+        linear-gradient(145deg, rgba(245,158,11,.22), rgba(239,68,68,.12)),
+        rgba(255,255,255,.025);
+      box-shadow:
+        0 26px 70px rgba(239,68,68,.16),
+        inset 0 1px 0 rgba(255,255,255,.1);
+      transition: transform .08s ease, border-color .18s ease, filter .18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .click-button:hover {
+      filter: brightness(1.08);
+      border-color: rgba(245,158,11,.56);
+    }
+
+    .click-button:active,
+    .click-button.pressed {
+      transform: scale(.965);
+    }
+
+    .click-label {
+      display: block;
+      font-size: clamp(38px, 7vw, 78px);
+      line-height: .92;
+      font-weight: 1000;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+      background: linear-gradient(100deg, #fff 0%, #ffd37a 46%, #ff7a7a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 16px 45px rgba(245,158,11,.12);
+    }
+
+    .click-hint {
+      display: block;
+      margin-top: 15px;
+      color: #b8becf;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .floating {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      font-weight: 1000;
+      font-size: 22px;
+      color: #ffd37a;
+      text-shadow: 0 3px 14px rgba(0,0,0,.7);
+      animation: floatUp .85s ease-out forwards;
+    }
+
+    .floating.critical {
+      color: #ff7373;
+      font-size: 28px;
+    }
+
+    @keyframes floatUp {
+      from { opacity: 1; transform: translate(-50%, -20%) scale(.85); }
+      to { opacity: 0; transform: translate(-50%, -145%) scale(1.15); }
+    }
+
+    .bottom-info {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #c7ccdc;
+      background: rgba(255,255,255,.035);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .shop-panel {
+      padding: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .shop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: #d0a85b;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h2 {
+      margin-bottom: 0;
+      font-size: 28px;
+      letter-spacing: -.05em;
+    }
+
+    .shop-list {
+      display: grid;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .upgrade {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--text);
+      background: rgba(255,255,255,.035);
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .upgrade:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: rgba(245,158,11,.4);
+      background: rgba(245,158,11,.075);
+    }
+
+    .upgrade:disabled {
+      opacity: .46;
+      cursor: not-allowed;
+    }
+
+    .upgrade-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(145deg, rgba(245,158,11,.17), rgba(239,68,68,.11));
+      font-size: 20px;
+    }
+
+    .upgrade-main strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .upgrade-main span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .upgrade-price {
+      min-width: 82px;
+      text-align: right;
+    }
+
+    .upgrade-price strong {
+      display: block;
+      color: #ffd37a;
+      font-size: 13px;
+    }
+
+    .upgrade-price span {
+      color: #747b91;
+      font-size: 10px;
+    }
+
+    .prestige-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid rgba(239,68,68,.24);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(239,68,68,.08), rgba(245,158,11,.045));
+      position: relative;
+      z-index: 2;
+    }
+
+    .prestige-box h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+    }
+
+    .prestige-box p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .prestige-btn {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      border-radius: 14px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 950;
+      background: linear-gradient(100deg, #dc2626, #f59e0b);
+      transition: transform .18s ease, filter .18s ease;
+    }
+
+    .prestige-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+    .prestige-btn:disabled { opacity: .42; cursor: not-allowed; }
+
+    footer {
+      padding: 0 0 24px;
+      text-align: center;
+      color: #72798e;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    footer strong { color: #bec4d4; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      z-index: 2000;
+      padding: 11px 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #fff;
+      background: rgba(17,19,28,.94);
+      box-shadow: 0 18px 50px rgba(0,0,0,.38);
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
       font-size: 13px;
       font-weight: 800;
     }
 
-    .timer {
-      min-width: 58px;
-      padding: 8px 10px;
-      text-align: center;
-      color: #dbeafe;
-      font-size: 13px;
-      font-weight: 900;
-      border: 1px solid rgba(34,211,238,.22);
-      border-radius: 10px;
-      background: rgba(34,211,238,.07);
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
+      .game-panel { min-height: auto; }
     }
 
-    .question {
-      min-height: 104px;
-      margin-bottom: 28px;
-      font-size: clamp(24px, 4vw, 36px);
-      line-height: 1.22;
-    }
-
-    .answers {
-      display: grid;
-      gap: 12px;
-    }
-
-    .answer-btn {
-      width: 100%;
-      min-height: 64px;
-      padding: 13px 16px;
-      display: grid;
-      grid-template-columns: 38px 1fr;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-      color: #e9ecf7;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,.035);
-      cursor: pointer;
-      transition: border-color .18s ease, background .18s ease, transform .18s ease;
-    }
-
-    .answer-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      border-color: rgba(139,92,246,.5);
-      background: rgba(139,92,246,.1);
-    }
-
-    .answer-btn:disabled {
-      cursor: default;
-    }
-
-    .answer-key {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      color: #bfc6dc;
-      font-size: 12px;
-      font-weight: 900;
-      border: 1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.045);
-    }
-
-    .answer-text {
-      font-size: 15px;
-      font-weight: 720;
-      line-height: 1.35;
-    }
-
-    .answer-btn.correct {
-      border-color: rgba(52, 211, 153, .65);
-      background: rgba(52, 211, 153, .11);
-    }
-
-    .answer-btn.wrong {
-      border-color: rgba(251, 113, 133, .62);
-      background: rgba(251, 113, 133, .11);
-    }
-
-    .result-score {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin: 18px 0 6px;
-    }
-
-    .score-number {
-      font-size: clamp(78px, 16vw, 134px);
-      font-weight: 950;
-      letter-spacing: -.09em;
-      line-height: .9;
-      background: linear-gradient(120deg, #fff 6%, #bca7ff 50%, #58e4ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .score-label {
-      color: var(--muted);
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .result-title {
-      margin-top: 24px;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: -.03em;
-    }
-
-    .result-description {
-      margin: 10px 0 28px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .result-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 26px;
-    }
-
-    .stat {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: rgba(255,255,255,.03);
-    }
-
-    .stat span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 750;
-      margin-bottom: 5px;
-    }
-
-    .stat strong {
-      font-size: 20px;
-    }
-
-
-    .paywall {
-      text-align: center;
-      padding: 8px 0 2px;
-    }
-
-    .lock-icon {
-      width: 86px;
-      height: 86px;
-      margin: 0 auto 24px;
-      display: grid;
-      place-items: center;
-      border-radius: 26px;
-      font-size: 38px;
-      border: 1px solid rgba(139, 92, 246, .35);
-      background:
-        radial-gradient(circle at 30% 20%, rgba(255,255,255,.15), transparent 38%),
-        linear-gradient(145deg, rgba(139,92,246,.28), rgba(34,211,238,.12));
-      box-shadow: 0 20px 55px rgba(124,58,237,.22);
-    }
-
-    .paywall-title {
-      max-width: 620px;
-      margin: 0 auto;
-      font-size: clamp(30px, 6vw, 54px);
-      line-height: 1.04;
-      letter-spacing: -.055em;
-      text-transform: uppercase;
-    }
-
-    .paywall-price {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 138px;
-      margin: 24px auto 18px;
-      padding: 13px 20px;
-      border-radius: 16px;
-      font-size: 26px;
-      font-weight: 950;
-      letter-spacing: -.03em;
-      color: #ffffff;
-      border: 1px solid rgba(34,211,238,.27);
-      background: rgba(34,211,238,.08);
-    }
-
-    .paywall-description {
-      max-width: 520px;
-      margin: 0 auto 28px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .secondary-btn {
-      width: 100%;
-      min-height: 52px;
-      margin-top: 12px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      color: #cbd1e5;
-      font-size: 14px;
-      font-weight: 850;
-      cursor: pointer;
-      background: rgba(255,255,255,.035);
-      transition: transform .2s ease, background .2s ease;
-    }
-
-    .secondary-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.07);
-    }
-
-    .disclaimer {
-      margin: 24px 0 0;
-      color: #777f99;
-      font-size: 11px;
-      line-height: 1.5;
-      text-align: center;
-    }
-
-    footer {
-      padding: 0 0 26px;
-      color: #6f7690;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    footer strong {
-      color: #bdc3d8;
-    }
-
-    @media (max-width: 620px) {
-      .page {
-        width: min(100% - 20px, 1120px);
-      }
-
-      header {
-        padding-top: 16px;
-      }
-
-      .header-badge {
-        display: none;
-      }
-
-      main {
-        padding-top: 14px;
-      }
-
-      .quiz-shell {
-        border-radius: 24px;
-      }
-
-      .content {
-        padding: 26px 18px 24px;
-      }
-
-      .question {
-        min-height: 116px;
-      }
-
-      .answer-btn {
-        min-height: 60px;
-      }
+    @media (max-width: 640px) {
+      .app { width: min(100% - 16px, 1240px); }
+      header { padding-top: 14px; }
+      .brand { font-size: 17px; }
+      .icon-btn span { display: none; }
+      main { padding-top: 8px; gap: 12px; }
+      .panel { border-radius: 22px; }
+      .game-panel, .shop-panel { padding: 17px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .click-zone { min-height: 310px; }
+      .click-button { min-height: 170px; border-radius: 26px; width: 100%; }
+      .upgrade { grid-template-columns: 40px 1fr; }
+      .upgrade-price { grid-column: 2; text-align: left; display: flex; gap: 6px; align-items: baseline; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
         transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 <body>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
 
-  <div class="page">
+  <div class="app">
     <header>
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M9 4.5 4.8 9 9 13.5M15 4.5 19.2 9 15 13.5M13.6 3 10.4 15.2"
-                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M7.5 19.2h9" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        IQ TEST
+        <div class="brand-mark">П</div>
+        ОБЩЕСТВО П
       </div>
-      <div class="header-badge">30 вопросов · 4 ответа</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="soundBtn" title="Звук">🔊 <span>ЗВУК</span></button>
+        <button class="icon-btn" id="resetBtn" title="Сбросить прогресс">↻ <span>СБРОС</span></button>
+      </div>
     </header>
 
     <main>
-      <section class="quiz-shell" aria-live="polite">
-        <div class="top-line"><div class="top-line-fill" id="progressBar"></div></div>
-
-        <div class="content">
-          <div class="screen active" id="startScreen">
-            <p class="eyebrow">Проверка логики и мышления</p>
-            <h1><span class="gradient-text">Насколько высок твой IQ?</span></h1>
-            <p class="intro-text">
-              Ответь на 30 коротких вопросов. В каждом — только один правильный вариант.
-              Результат появится сразу после прохождения.
-            </p>
-
-            <div class="meta-row">
-              <div class="meta-chip">⏱ 15 секунд на вопрос</div>
-              <div class="meta-chip">🧠 Логика, числа, внимание</div>
-              <div class="meta-chip">⚡ Мгновенный результат</div>
-            </div>
-
-            <button class="primary-btn" id="startBtn">НАЧАТЬ ТЕСТ</button>
-            <p class="disclaimer">Развлекательный тест. Результат не является официальной психологической диагностикой.</p>
+      <section class="panel game-panel">
+        <div class="stats">
+          <div class="stat-card">
+            <span>Очки общества</span>
+            <strong id="score">0</strong>
           </div>
-
-          <div class="screen" id="quizScreen">
-            <div class="quiz-header">
-              <div class="counter" id="counter">ВОПРОС 1 ИЗ 30</div>
-              <div class="timer" id="timer">15</div>
-            </div>
-
-            <h2 class="question" id="questionText"></h2>
-            <div class="answers" id="answers"></div>
+          <div class="stat-card">
+            <span>За клик</span>
+            <strong id="perClick">1</strong>
           </div>
-
-          <div class="screen" id="resultScreen">
-            <div class="paywall">
-              <div class="lock-icon" aria-hidden="true">🔒</div>
-              <p class="eyebrow">Тест завершён</p>
-              <h2 class="paywall-title">
-                <span class="gradient-text">ОПЛАТИТЕ 20 РУБЛЕЙ, ЧТОБЫ УЗНАТЬ РЕЗУЛЬТАТЫ ТЕСТА</span>
-              </h2>
-              <div class="paywall-price">20 ₽</div>
-              <p class="paywall-description">
-                Ваш результат уже рассчитан и временно скрыт. После оплаты откроется итоговый IQ-балл.
-              </p>
-              <button class="primary-btn" id="payBtn">ОПЛАТИТЬ 20 ₽</button>
-              <button class="secondary-btn" id="restartBtn">ПРОЙТИ ТЕСТ ЗАНОВО</button>
-              <p class="disclaimer">Демонстрационная версия: платёжная система пока не подключена.</p>
-            </div>
+          <div class="stat-card">
+            <span>В секунду</span>
+            <strong id="perSecond">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Всего кликов</span>
+            <strong id="totalClicks">0</strong>
           </div>
         </div>
+
+        <div class="level-wrap">
+          <div class="level-row">
+            <span id="levelText">УРОВЕНЬ 1</span>
+            <span id="xpText">0 / 100 XP</span>
+          </div>
+          <div class="level-bar">
+            <div class="level-fill" id="levelFill"></div>
+          </div>
+        </div>
+
+        <div class="click-zone">
+          <button class="click-button" id="clickButton" aria-label="Кликнуть по ОБЩЕСТВО П">
+            <span class="click-label">ОБЩЕСТВО П</span>
+            <span class="click-hint">НАЖИМАЙ И ПРОКАЧИВАЙ ОБЩЕСТВО</span>
+          </button>
+        </div>
+
+        <div class="bottom-info">
+          <div class="chip">🔥 Крит: <span id="critChance">5%</span></div>
+          <div class="chip">⚡ Критический множитель: <span id="critMultiplier">×3</span></div>
+          <div class="chip">🏆 Престиж: <span id="prestigeCount">0</span></div>
+        </div>
       </section>
+
+      <aside class="panel shop-panel">
+        <div class="shop-header">
+          <div>
+            <p class="eyebrow">Прокачка</p>
+            <h2>МАГАЗИН</h2>
+          </div>
+        </div>
+
+        <div class="shop-list">
+          <button class="upgrade" data-upgrade="click">
+            <div class="upgrade-icon">👆</div>
+            <div class="upgrade-main">
+              <strong>Сила общества</strong>
+              <span>Увеличивает количество очков за каждый клик.</span>
+            </div>
+            <div class="upgrade-price">
+              <strong id="clickPrice">25</strong>
+              <span>ур. <b id="clickLevel">0</b></span>
+            </div>
+          </button>
+
+          <button class="upgrade" data-upgrade="auto">
+            <div class="upgrade-icon">🤖</div>
+            <div class="upgrade-main">
+              <strong>Агитатор</strong>
+              <span>Автоматически приносит очки каждую секунду.</span>
+            </div>
+            <div class="upgrade-price">
+              <strong id="autoPrice">75</strong>
+              <span>ур. <b id="autoLevel">0</b></span>
+            </div>
+          </button>
+
+          <button class="upgrade" data-upgrade="crit">
+            <div class="upgrade-icon">💥</div>
+            <div class="upgrade-main">
+              <strong>Шанс резонанса</strong>
+              <span>Повышает шанс критического клика на 2%.</span>
+            </div>
+            <div class="upgrade-price">
+              <strong id="critPrice">180</strong>
+              <span>ур. <b id="critLevel">0</b></span>
+            </div>
+          </button>
+
+          <button class="upgrade" data-upgrade="multiplier">
+            <div class="upgrade-icon">📣</div>
+            <div class="upgrade-main">
+              <strong>Мегафон</strong>
+              <span>Усиливает все клики на 25%.</span>
+            </div>
+            <div class="upgrade-price">
+              <strong id="multiplierPrice">350</strong>
+              <span>ур. <b id="multiplierLevel">0</b></span>
+            </div>
+          </button>
+
+          <button class="upgrade" data-upgrade="factory">
+            <div class="upgrade-icon">🏭</div>
+            <div class="upgrade-main">
+              <strong>Штаб общества</strong>
+              <span>Даёт крупный постоянный пассивный доход.</span>
+            </div>
+            <div class="upgrade-price">
+              <strong id="factoryPrice">1200</strong>
+              <span>ур. <b id="factoryLevel">0</b></span>
+            </div>
+          </button>
+        </div>
+
+        <div class="prestige-box">
+          <h3>🏆 Перезапуск общества</h3>
+          <p>
+            После 100 000 очков можно начать заново и навсегда получить +25% ко всему доходу за каждый престиж.
+          </p>
+          <button class="prestige-btn" id="prestigeBtn" disabled>НУЖНО 100 000</button>
+        </div>
+      </aside>
     </main>
 
-    <footer>by <strong>@archivebtw</strong></footer>
+    <footer>by <strong>@archivebtw</strong> · прогресс сохраняется автоматически</footer>
   </div>
 
-  <script>
-    const questions = [
-      {
-        question: "Какое число должно быть следующим: 2, 6, 12, 20, 30, ...?",
-        answers: ["36", "40", "42", "44"],
-        correct: 2
-      },
-      {
-        question: "Все зоры — лиры. Некоторые лиры — моры. Что точно верно?",
-        answers: ["Все моры — зоры", "Некоторые зоры — моры", "Ни один зор не может быть мором", "Нельзя точно определить связь зоров и моров"],
-        correct: 3
-      },
-      {
-        question: "Найди лишнее слово.",
-        answers: ["Квадрат", "Треугольник", "Круг", "Куб"],
-        correct: 3
-      },
-      {
-        question: "Если 5 станков делают 5 деталей за 5 минут, сколько времени 100 станкам нужно для 100 деталей?",
-        answers: ["5 минут", "20 минут", "100 минут", "500 минут"],
-        correct: 0
-      },
-      {
-        question: "Какое число пропущено: 1, 1, 2, 3, 5, 8, 13, ...?",
-        answers: ["18", "20", "21", "26"],
-        correct: 2
-      },
-      {
-        question: "У Ани 3 сестры. У каждой сестры есть один общий брат. Сколько всего детей в семье?",
-        answers: ["4", "5", "6", "7"],
-        correct: 1
-      },
-      {
-        question: "Выбери пару с такой же связью: КНИГА — ЧИТАТЬ.",
-        answers: ["Музыка — слушать", "Ложка — тарелка", "Дверь — окно", "Река — мост"],
-        correct: 0
-      },
-      {
-        question: "Какое число не подходит к остальным?",
-        answers: ["16", "25", "36", "48"],
-        correct: 3
-      },
-      {
-        question: "Часы показывают 3:15. Какой примерно угол между стрелками?",
-        answers: ["0°", "7,5°", "15°", "30°"],
-        correct: 1
-      },
-      {
-        question: "Продолжи последовательность букв: А, В, Д, З, ...",
-        answers: ["И", "К", "Л", "М"],
-        correct: 1
-      },
-      {
-        question: "В ящике по 4 красных, синих и зелёных носка. Сколько носков нужно достать в темноте, чтобы гарантированно получить пару одного цвета?",
-        answers: ["2", "3", "4", "5"],
-        correct: 2
-      },
-      {
-        question: "Если вчера было за два дня до понедельника, какой день сегодня?",
-        answers: ["Суббота", "Воскресенье", "Понедельник", "Вторник"],
-        correct: 1
-      },
-      {
-        question: "Продолжи ряд: 3, 9, 27, 81, ...",
-        answers: ["162", "243", "324", "729"],
-        correct: 1
-      },
-      {
-        question: "Какое слово можно составить из букв О, К, Н, О?",
-        answers: ["КОН", "ОКНО", "НОК", "КОНО"],
-        correct: 1
-      },
-      {
-        question: "Если все фламы красные, а этот предмет не красный, может ли он быть фламом?",
-        answers: ["Да, всегда", "Нет", "Только ночью", "Недостаточно данных"],
-        correct: 1
-      },
-      {
-        question: "Какое число должно стоять вместо вопроса: 4, 7, 13, 25, 49, ?",
-        answers: ["73", "89", "97", "101"],
-        correct: 2
-      },
-      {
-        question: "Два отца и два сына съели три яблока, каждому досталось по одному. Сколько было людей?",
-        answers: ["2", "3", "4", "5"],
-        correct: 1
-      },
-      {
-        question: "Какой символ продолжает чередование: ○, □, ○, □, ○, ...?",
-        answers: ["△", "□", "○", "◇"],
-        correct: 1
-      },
-      {
-        question: "Если перевернуть число 69 на 180°, что получится?",
-        answers: ["69", "96", "66", "99"],
-        correct: 0
-      },
-      {
-        question: "Найди аналогию: ПТИЦА относится к ГНЕЗДУ, как ПЧЕЛА относится к...",
-        answers: ["Норе", "Улью", "Лесу", "Стае"],
-        correct: 1
-      },
-      {
-        question: "Сколько месяцев в году имеют 28 дней?",
-        answers: ["1", "2", "6", "12"],
-        correct: 3
-      },
-      {
-        question: "Какое число пропущено: 64, 32, 16, 8, ...?",
-        answers: ["2", "3", "4", "6"],
-        correct: 2
-      },
-      {
-        question: "У прямоугольника отрезали один угол. Сколько углов стало?",
-        answers: ["3", "4", "5", "6"],
-        correct: 2
-      },
-      {
-        question: "Какое слово лишнее?",
-        answers: ["Яблоко", "Груша", "Морковь", "Слива"],
-        correct: 2
-      },
-      {
-        question: "Если сегодня среда, какой день будет через 10 дней?",
-        answers: ["Пятница", "Суббота", "Воскресенье", "Понедельник"],
-        correct: 1
-      },
-      {
-        question: "Продолжи ряд: 1, 4, 9, 16, 25, ...",
-        answers: ["30", "32", "36", "49"],
-        correct: 2
-      },
-      {
-        question: "В семье пять дочерей. У каждой есть один общий брат. Сколько детей в семье?",
-        answers: ["5", "6", "10", "11"],
-        correct: 1
-      },
-      {
-        question: "Какое число при умножении само на себя даёт 144?",
-        answers: ["10", "11", "12", "14"],
-        correct: 2
-      },
-      {
-        question: "Что тяжелее: килограмм железа или килограмм ваты?",
-        answers: ["Железо", "Вата", "Одинаково", "Зависит от температуры"],
-        correct: 2
-      },
-      {
-        question: "Найди пропущенное число: 10, 8, 11, 9, 12, 10, ...",
-        answers: ["11", "12", "13", "14"],
-        correct: 2
-      },
-    ];
+  <div class="toast" id="toast"></div>
 
-    const screens = {
-      start: document.getElementById("startScreen"),
-      quiz: document.getElementById("quizScreen"),
-      result: document.getElementById("resultScreen")
+  <script>
+    const SAVE_KEY = "obshestvo-p-clicker-save-v1";
+
+    const defaultState = {
+      score: 0,
+      totalEarned: 0,
+      totalClicks: 0,
+      clickLevel: 0,
+      autoLevel: 0,
+      critLevel: 0,
+      multiplierLevel: 0,
+      factoryLevel: 0,
+      prestige: 0,
+      sound: true,
+      lastSaved: Date.now()
     };
 
-    const progressBar = document.getElementById("progressBar");
-    const counter = document.getElementById("counter");
-    const timerEl = document.getElementById("timer");
-    const questionText = document.getElementById("questionText");
-    const answersEl = document.getElementById("answers");
+    let state = loadState();
+    let audioContext = null;
 
-    let currentQuestion = 0;
-    let correctAnswers = 0;
-    let timeLeft = 15;
-    let timerId = null;
-    let locked = false;
+    const el = {
+      score: document.getElementById("score"),
+      perClick: document.getElementById("perClick"),
+      perSecond: document.getElementById("perSecond"),
+      totalClicks: document.getElementById("totalClicks"),
+      critChance: document.getElementById("critChance"),
+      critMultiplier: document.getElementById("critMultiplier"),
+      prestigeCount: document.getElementById("prestigeCount"),
+      levelText: document.getElementById("levelText"),
+      xpText: document.getElementById("xpText"),
+      levelFill: document.getElementById("levelFill"),
+      clickButton: document.getElementById("clickButton"),
+      prestigeBtn: document.getElementById("prestigeBtn"),
+      soundBtn: document.getElementById("soundBtn"),
+      toast: document.getElementById("toast")
+    };
 
-    function showScreen(name) {
-      Object.values(screens).forEach(screen => screen.classList.remove("active"));
-      screens[name].classList.add("active");
+    const upgradeConfig = {
+      click: {
+        levelKey: "clickLevel",
+        base: 25,
+        growth: 1.58,
+        priceEl: "clickPrice",
+        levelEl: "clickLevel"
+      },
+      auto: {
+        levelKey: "autoLevel",
+        base: 75,
+        growth: 1.72,
+        priceEl: "autoPrice",
+        levelEl: "autoLevel"
+      },
+      crit: {
+        levelKey: "critLevel",
+        base: 180,
+        growth: 1.86,
+        priceEl: "critPrice",
+        levelEl: "critLevel"
+      },
+      multiplier: {
+        levelKey: "multiplierLevel",
+        base: 350,
+        growth: 1.92,
+        priceEl: "multiplierPrice",
+        levelEl: "multiplierLevel"
+      },
+      factory: {
+        levelKey: "factoryLevel",
+        base: 1200,
+        growth: 2.05,
+        priceEl: "factoryPrice",
+        levelEl: "factoryLevel"
+      }
+    };
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
+        if (!saved) return { ...defaultState };
+        return { ...defaultState, ...saved };
+      } catch {
+        return { ...defaultState };
+      }
     }
 
-    function startQuiz() {
-      currentQuestion = 0;
-      correctAnswers = 0;
-      progressBar.style.width = "0%";
-      showScreen("quiz");
-      renderQuestion();
+    function saveState() {
+      state.lastSaved = Date.now();
+      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     }
 
-    function renderQuestion() {
-      locked = false;
-      clearInterval(timerId);
-      timeLeft = 15;
-      timerEl.textContent = timeLeft;
-      timerEl.style.color = "#dbeafe";
-      timerEl.style.borderColor = "rgba(34,211,238,.22)";
-      timerEl.style.background = "rgba(34,211,238,.07)";
+    function compact(value) {
+      if (!Number.isFinite(value)) return "0";
+      if (value < 1000) return Math.floor(value).toLocaleString("ru-RU");
 
-      const item = questions[currentQuestion];
-      counter.textContent = `ВОПРОС ${currentQuestion + 1} ИЗ ${questions.length}`;
-      questionText.textContent = item.question;
-      progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
-      answersEl.innerHTML = "";
+      const units = [
+        [1e15, "КВ"],
+        [1e12, "Т"],
+        [1e9, "МЛРД"],
+        [1e6, "МЛН"],
+        [1e3, "ТЫС"]
+      ];
 
-      item.answers.forEach((answer, index) => {
-        const button = document.createElement("button");
-        button.className = "answer-btn";
-        button.innerHTML = `
-          <span class="answer-key">${String.fromCharCode(65 + index)}</span>
-          <span class="answer-text">${answer}</span>
-        `;
-        button.addEventListener("click", () => selectAnswer(index));
-        answersEl.appendChild(button);
-      });
-
-      timerId = setInterval(() => {
-        timeLeft -= 1;
-        timerEl.textContent = timeLeft;
-
-        if (timeLeft <= 5) {
-          timerEl.style.color = "#fecdd3";
-          timerEl.style.borderColor = "rgba(251,113,133,.35)";
-          timerEl.style.background = "rgba(251,113,133,.08)";
+      for (const [size, suffix] of units) {
+        if (value >= size) {
+          const n = value / size;
+          return `${n >= 100 ? n.toFixed(0) : n >= 10 ? n.toFixed(1) : n.toFixed(2)} ${suffix}`;
         }
-
-        if (timeLeft <= 0) {
-          clearInterval(timerId);
-          selectAnswer(-1);
-        }
-      }, 1000);
-    }
-
-    function selectAnswer(selectedIndex) {
-      if (locked) return;
-      locked = true;
-      clearInterval(timerId);
-
-      const item = questions[currentQuestion];
-      const buttons = [...answersEl.querySelectorAll(".answer-btn")];
-      buttons.forEach(button => button.disabled = true);
-
-      if (selectedIndex === item.correct) {
-        correctAnswers += 1;
       }
 
-      buttons[item.correct]?.classList.add("correct");
+      return Math.floor(value).toLocaleString("ru-RU");
+    }
 
-      if (selectedIndex >= 0 && selectedIndex !== item.correct) {
-        buttons[selectedIndex]?.classList.add("wrong");
+    function prestigeMultiplier() {
+      return 1 + state.prestige * 0.25;
+    }
+
+    function globalMultiplier() {
+      return (1 + state.multiplierLevel * 0.25) * prestigeMultiplier();
+    }
+
+    function clickPower() {
+      const base = 1 + state.clickLevel * 2 + Math.floor(state.clickLevel / 5) * 5;
+      return base * globalMultiplier();
+    }
+
+    function passiveIncome() {
+      const auto = state.autoLevel * 1.5;
+      const factory = state.factoryLevel * 28;
+      return (auto + factory) * globalMultiplier();
+    }
+
+    function criticalChance() {
+      return Math.min(0.65, 0.05 + state.critLevel * 0.02);
+    }
+
+    function upgradePrice(type) {
+      const cfg = upgradeConfig[type];
+      return Math.floor(cfg.base * Math.pow(cfg.growth, state[cfg.levelKey]));
+    }
+
+    function playerLevel() {
+      return Math.floor(Math.sqrt(state.totalEarned / 115)) + 1;
+    }
+
+    function levelProgress() {
+      const level = playerLevel();
+      const prev = Math.pow(level - 1, 2) * 115;
+      const next = Math.pow(level, 2) * 115;
+      const current = Math.max(0, state.totalEarned - prev);
+      const need = Math.max(1, next - prev);
+      return { level, current, need, percent: Math.min(100, current / need * 100) };
+    }
+
+    function render() {
+      el.score.textContent = compact(state.score);
+      el.perClick.textContent = compact(clickPower());
+      el.perSecond.textContent = compact(passiveIncome());
+      el.totalClicks.textContent = compact(state.totalClicks);
+      el.critChance.textContent = `${Math.round(criticalChance() * 100)}%`;
+      el.critMultiplier.textContent = "×3";
+      el.prestigeCount.textContent = state.prestige;
+
+      const level = levelProgress();
+      el.levelText.textContent = `УРОВЕНЬ ${level.level}`;
+      el.xpText.textContent = `${compact(level.current)} / ${compact(level.need)} XP`;
+      el.levelFill.style.width = `${level.percent}%`;
+
+      for (const [type, cfg] of Object.entries(upgradeConfig)) {
+        const price = upgradePrice(type);
+        document.getElementById(cfg.priceEl).textContent = compact(price);
+        document.getElementById(cfg.levelEl).textContent = state[cfg.levelKey];
+
+        const button = document.querySelector(`[data-upgrade="${type}"]`);
+        button.disabled = state.score < price;
       }
 
-      setTimeout(() => {
-        currentQuestion += 1;
+      const canPrestige = state.score >= 100000;
+      el.prestigeBtn.disabled = !canPrestige;
+      el.prestigeBtn.textContent = canPrestige
+        ? `ПЕРЕЗАПУСТИТЬ · +25% НАВСЕГДА`
+        : `НУЖНО ${compact(100000 - state.score)}`;
 
-        if (currentQuestion < questions.length) {
-          renderQuestion();
-        } else {
-          finishQuiz();
-        }
-      }, 760);
+      el.soundBtn.innerHTML = state.sound
+        ? '🔊 <span>ЗВУК</span>'
+        : '🔇 <span>ЗВУК</span>';
     }
 
-    function finishQuiz() {
-      clearInterval(timerId);
-      progressBar.style.width = "100%";
-
-      const hiddenAccuracy = Math.round((correctAnswers / questions.length) * 100);
-      const hiddenIq = Math.max(
-        70,
-        Math.min(145, 70 + Math.round(correctAnswers * 2.4) + (correctAnswers === questions.length ? 3 : 0))
-      );
-
-      sessionStorage.setItem("archivebtwIqResult", String(hiddenIq));
-      sessionStorage.setItem("archivebtwIqAccuracy", String(hiddenAccuracy));
-      sessionStorage.setItem("archivebtwIqCorrect", String(correctAnswers));
-
-      showScreen("result");
+    function addScore(amount) {
+      state.score += amount;
+      state.totalEarned += amount;
     }
 
-    document.getElementById("startBtn").addEventListener("click", startQuiz);
-    document.getElementById("restartBtn").addEventListener("click", startQuiz);
-    document.getElementById("payBtn").addEventListener("click", () => {
-      alert("Платёжная система пока не подключена.");
+    function clickGame(event) {
+      const critical = Math.random() < criticalChance();
+      const amount = clickPower() * (critical ? 3 : 1);
+
+      addScore(amount);
+      state.totalClicks += 1;
+
+      el.clickButton.classList.add("pressed");
+      setTimeout(() => el.clickButton.classList.remove("pressed"), 80);
+
+      createFloating(event.clientX || window.innerWidth / 2, event.clientY || window.innerHeight / 2, amount, critical);
+      playClickSound(critical);
+      render();
+    }
+
+    function createFloating(x, y, amount, critical) {
+      const node = document.createElement("div");
+      node.className = `floating${critical ? " critical" : ""}`;
+      node.textContent = `${critical ? "КРИТ! " : "+"}${compact(amount)}`;
+      node.style.left = `${x}px`;
+      node.style.top = `${y}px`;
+      document.body.appendChild(node);
+      setTimeout(() => node.remove(), 900);
+    }
+
+    function buyUpgrade(type) {
+      const cfg = upgradeConfig[type];
+      const price = upgradePrice(type);
+
+      if (state.score < price) return;
+
+      state.score -= price;
+      state[cfg.levelKey] += 1;
+      playUpgradeSound();
+      showToast("Прокачка куплена");
+      render();
+      saveState();
+    }
+
+    function doPrestige() {
+      if (state.score < 100000) return;
+
+      state.prestige += 1;
+      state.score = 0;
+      state.clickLevel = 0;
+      state.autoLevel = 0;
+      state.critLevel = 0;
+      state.multiplierLevel = 0;
+      state.factoryLevel = 0;
+
+      showToast(`Престиж ${state.prestige}: доход увеличен навсегда`);
+      playUpgradeSound();
+      render();
+      saveState();
+    }
+
+    function showToast(text) {
+      el.toast.textContent = text;
+      el.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => el.toast.classList.remove("show"), 1800);
+    }
+
+    function ensureAudio() {
+      if (!state.sound) return null;
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        audioContext = new AudioCtx();
+      }
+      return audioContext;
+    }
+
+    function tone(frequency, duration, volume = .035, type = "sine") {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
+      gain.gain.value = volume;
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start();
+      gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + duration);
+      oscillator.stop(ctx.currentTime + duration);
+    }
+
+    function playClickSound(critical) {
+      if (critical) {
+        tone(360, .12, .045, "square");
+        setTimeout(() => tone(620, .12, .035, "square"), 45);
+      } else {
+        tone(190, .06, .025, "sine");
+      }
+    }
+
+    function playUpgradeSound() {
+      tone(320, .12, .035, "triangle");
+      setTimeout(() => tone(480, .15, .035, "triangle"), 80);
+    }
+
+    el.clickButton.addEventListener("click", clickGame);
+
+    document.querySelectorAll("[data-upgrade]").forEach(button => {
+      button.addEventListener("click", () => buyUpgrade(button.dataset.upgrade));
+    });
+
+    el.prestigeBtn.addEventListener("click", doPrestige);
+
+    el.soundBtn.addEventListener("click", () => {
+      state.sound = !state.sound;
+      render();
+      saveState();
+      showToast(state.sound ? "Звук включён" : "Звук выключен");
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const confirmed = confirm("Полностью сбросить весь прогресс кликера?");
+      if (!confirmed) return;
+      state = { ...defaultState, sound: state.sound };
+      saveState();
+      render();
+      showToast("Прогресс сброшен");
     });
 
     document.addEventListener("keydown", event => {
-      if (!screens.quiz.classList.contains("active") || locked) return;
-      const key = event.key.toLowerCase();
-      const index = ["a", "b", "c", "d", "ф", "и", "с", "в"].indexOf(key);
-      if (index >= 0) selectAnswer(index % 4);
+      if (event.code === "Space" || event.code === "Enter") {
+        const activeTag = document.activeElement?.tagName;
+        if (activeTag === "BUTTON" && document.activeElement !== el.clickButton) return;
+        event.preventDefault();
+        const rect = el.clickButton.getBoundingClientRect();
+        clickGame({
+          clientX: rect.left + rect.width / 2,
+          clientY: rect.top + rect.height / 2
+        });
+      }
     });
+
+    const awaySeconds = Math.min(
+      4 * 60 * 60,
+      Math.max(0, (Date.now() - (state.lastSaved || Date.now())) / 1000)
+    );
+
+    const awayIncome = passiveIncome() * awaySeconds * 0.5;
+    if (awayIncome >= 1) {
+      addScore(awayIncome);
+      showToast(`Пока тебя не было: +${compact(awayIncome)}`);
+    }
+
+    setInterval(() => {
+      const income = passiveIncome() / 10;
+      if (income > 0) {
+        addScore(income);
+        render();
+      }
+    }, 100);
+
+    setInterval(saveState, 5000);
+    window.addEventListener("beforeunload", saveState);
+
+    render();
   </script>
 </body>
 </html>
