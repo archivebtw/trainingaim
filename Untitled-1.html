@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AIM TRAINER</title>
+
+    <style>
+        :root {
+            color-scheme: dark;
+
+            --background: #08090d;
+            --panel: rgba(19, 21, 29, 0.92);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text: #f4f6ff;
+            --muted: #8b90a1;
+            --accent: #ff3b5c;
+            --accent-light: #ff758b;
+            --success: #42f5a4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+        }
+
+        body {
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 50% -20%,
+                    rgba(255, 59, 92, 0.18),
+                    transparent 45%
+                ),
+                var(--background);
+            color: var(--text);
+            font-family:
+                Inter,
+                Arial,
+                sans-serif;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .app {
+            width: 100vw;
+            height: 100dvh;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .header {
+            min-height: 74px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 30px;
+            padding: 12px 20px;
+            border: 1px solid var(--panel-border);
+            border-radius: 18px;
+            background: var(--panel);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            width: 16px;
+            height: 16px;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            box-shadow:
+                0 0 18px rgba(255, 59, 92, 0.8),
+                inset 0 0 8px rgba(255, 59, 92, 0.5);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .stat {
+            min-width: 0;
+            padding: 7px 12px;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-name {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            display: block;
+            overflow: hidden;
+            font-size: 19px;
+            font-weight: 900;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .arena {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            cursor: crosshair;
+            user-select: none;
+            touch-action: manipulation;
+            border: 1px solid var(--panel-border);
+            border-radius: 22px;
+            background:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                ),
+                radial-gradient(
+                    circle at center,
+                    #171922 0%,
+                    #0d0f15 68%,
+                    #090a0e 100%
+                );
+            background-size:
+                42px 42px,
+                42px 42px,
+                auto;
+            box-shadow:
+                inset 0 0 80px rgba(0, 0, 0, 0.45),
+                0 14px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .arena.running {
+            cursor: crosshair;
+        }
+
+        .target {
+            --target-size: 64px;
+
+            position: absolute;
+            z-index: 5;
+            width: var(--target-size);
+            height: var(--target-size);
+            padding: 0;
+            display: none;
+            border: 0;
+            border-radius: 50%;
+            cursor: crosshair;
+            background:
+                radial-gradient(
+                    circle,
+                    #ffffff 0 11%,
+                    #ffbbc6 12% 22%,
+                    var(--accent) 23% 51%,
+                    #a90c2b 52% 66%,
+                    #ff5b77 67% 100%
+                );
+            box-shadow:
+                0 0 0 5px rgba(255, 59, 92, 0.12),
+                0 0 30px rgba(255, 59, 92, 0.75);
+            animation: targetAppear 120ms ease-out;
+        }
+
+        .target.visible {
+            display: block;
+        }
+
+        .target::after {
+            content: "";
+            position: absolute;
+            inset: 23%;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+        }
+
+        @keyframes targetAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.35);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .overlay {
+            position: absolute;
+            z-index: 20;
+            inset: 0;
+            padding: 24px;
+            display: grid;
+            place-items: center;
+            background: rgba(4, 5, 8, 0.58);
+            backdrop-filter: blur(8px);
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        .menu {
+            width: min(520px, 100%);
+            padding: 38px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 26px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(30, 32, 43, 0.96),
+                    rgba(14, 15, 21, 0.96)
+                );
+            box-shadow:
+                0 24px 90px rgba(0, 0, 0, 0.58),
+                inset 0 1px rgba(255, 255, 255, 0.06);
+        }
+
+        .menu-label {
+            margin-bottom: 14px;
+            color: var(--accent-light);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .menu h1 {
+            margin: 0;
+            font-size: clamp(38px, 7vw, 70px);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+        }
+
+        .description {
+            max-width: 390px;
+            margin: 20px auto 28px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .start-button {
+            width: 100%;
+            min-height: 58px;
+            border: 0;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--accent),
+                    #c20d3a
+                );
+            box-shadow:
+                0 12px 30px rgba(255, 59, 92, 0.26);
+            transition:
+                transform 150ms ease,
+                filter 150ms ease;
+        }
+
+        .start-button:hover {
+            filter: brightness(1.12);
+            transform: translateY(-2px);
+        }
+
+        .start-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .start-button:disabled {
+            cursor: default;
+            opacity: 0.5;
+            transform: none;
+        }
+
+        .result-grid {
+            margin: 24px 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .result-item {
+            padding: 16px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.035);
+        }
+
+        .result-item strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 22px;
+        }
+
+        .result-item span {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .miss-marker {
+            position: absolute;
+            z-index: 3;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: missDisappear 400ms forwards;
+        }
+
+        .miss-marker::before,
+        .miss-marker::after {
+            content: "";
+            position: absolute;
+            top: 11px;
+            left: 1px;
+            width: 22px;
+            height: 2px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .miss-marker::before {
+            transform: rotate(45deg);
+        }
+
+        .miss-marker::after {
+            transform: rotate(-45deg);
+        }
+
+        @keyframes missDisappear {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.6);
+            }
+
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .app {
+                padding: 10px;
+            }
+
+            .header {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 13px;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stat {
+                text-align: center;
+                border-left: 0;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .arena {
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .app {
+                gap: 8px;
+            }
+
+            .header {
+                min-height: auto;
+            }
+
+            .logo {
+                font-size: 15px;
+            }
+
+            .stat {
+                padding: 4px;
+            }
+
+            .stat-name {
+                font-size: 8px;
+            }
+
+            .stat-value {
+                font-size: 14px;
+            }
+
+            .menu {
+                padding: 28px 20px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon"></span>
+                AIM TRAINER
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-name">Время</span>
+                    <span class="stat-value" id="timeValue">30.0</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-name">Попадания</span>
+                    <span class="stat-value" id="hitsValue">0</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-name">Промахи</span>
+                    <span class="stat-value" id="missesValue">0</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-name">Точность</span>
+                    <span class="stat-value" id="accuracyValue">100%</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-name">Реакция</span>
+                    <span class="stat-value" id="reactionValue">—</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-name">Рекорд</span>
+                    <span class="stat-value" id="bestValue">0</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="arena" id="arena">
+            <button
+                class="target"
+                id="target"
+                type="button"
+                aria-label="Цель"
+            ></button>
+
+            <div class="overlay" id="overlay">
+                <div class="menu">
+                    <div class="menu-label" id="menuLabel">
+                        Тренировка реакции
+                    </div>
+
+                    <h1 id="menuTitle">AIM<br>TRAINER</h1>
+
+                    <p class="description" id="menuDescription">
+                        Нажимай на появляющиеся цели как можно быстрее.
+                        Кликом по пустому месту засчитывается промах.
+                        Продолжительность раунда — 30 секунд.
+                    </p>
+
+                    <div
+                        class="result-grid"
+                        id="resultGrid"
+                        hidden
+                    >
+                        <div class="result-item">
+                            <strong id="resultHits">0</strong>
+                            <span>Попаданий</span>
+                        </div>
+
+                        <div class="result-item">
+                            <strong id="resultAccuracy">0%</strong>
+                            <span>Точность</span>
+                        </div>
+
+                        <div class="result-item">
+                            <strong id="resultReaction">—</strong>
+                            <span>Реакция</span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="start-button"
+                        id="startButton"
+                        type="button"
+                    >
+                        Начать тренировку
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        "use strict";
+
+        const ROUND_DURATION = 30_000;
+        const MIN_SPAWN_DELAY = 120;
+        const MAX_SPAWN_DELAY = 430;
+
+        const arena = document.getElementById("arena");
+        const target = document.getElementById("target");
+
+        const overlay = document.getElementById("overlay");
+        const menuLabel = document.getElementById("menuLabel");
+        const menuTitle = document.getElementById("menuTitle");
+        const menuDescription =
+            document.getElementById("menuDescription");
+        const startButton =
+            document.getElementById("startButton");
+        const resultGrid =
+            document.getElementById("resultGrid");
+
+        const timeValue =
+            document.getElementById("timeValue");
+        const hitsValue =
+            document.getElementById("hitsValue");
+        const missesValue =
+            document.getElementById("missesValue");
+        const accuracyValue =
+            document.getElementById("accuracyValue");
+        const reactionValue =
+            document.getElementById("reactionValue");
+        const bestValue =
+            document.getElementById("bestValue");
+
+        const resultHits =
+            document.getElementById("resultHits");
+        const resultAccuracy =
+            document.getElementById("resultAccuracy");
+        const resultReaction =
+            document.getElementById("resultReaction");
+
+        let running = false;
+        let hits = 0;
+        let misses = 0;
+        let reactionTimes = [];
+
+        let targetSpawnTime = 0;
+        let roundEndTime = 0;
+        let animationFrameId = null;
+        let spawnTimeoutId = null;
+
+        let bestScore = Number(
+            localStorage.getItem("aimTrainerBestScore") || 0
+        );
+
+        bestValue.textContent = bestScore;
+
+        function randomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function calculateAccuracy() {
+            const totalShots = hits + misses;
+
+            if (totalShots === 0) {
+                return 100;
+            }
+
+            return Math.round((hits / totalShots) * 100);
+        }
+
+        function calculateAverageReaction() {
+            if (reactionTimes.length === 0) {
+                return null;
+            }
+
+            const total = reactionTimes.reduce(
+                (sum, value) => sum + value,
+                0
+            );
+
+            return Math.round(total / reactionTimes.length);
+        }
+
+        function updateStats(remainingTime = ROUND_DURATION) {
+            const averageReaction =
+                calculateAverageReaction();
+
+            timeValue.textContent = (
+                Math.max(0, remainingTime) / 1000
+            ).toFixed(1);
+
+            hitsValue.textContent = hits;
+            missesValue.textContent = misses;
+            accuracyValue.textContent =
+                `${calculateAccuracy()}%`;
+
+            reactionValue.textContent =
+                averageReaction === null
+                    ? "—"
+                    : `${averageReaction} мс`;
+
+            bestValue.textContent = bestScore;
+        }
+
+        function hideTarget() {
+            target.classList.remove("visible");
+        }
+
+        function showTarget() {
+            if (!running) {
+                return;
+            }
+
+            const arenaRect =
+                arena.getBoundingClientRect();
+
+            const targetSize = Math.round(
+                randomNumber(48, 72)
+            );
+
+            target.style.setProperty(
+                "--target-size",
+                `${targetSize}px`
+            );
+
+            const padding = 12;
+
+            const maximumX = Math.max(
+                padding,
+                arenaRect.width - targetSize - padding
+            );
+
+            const maximumY = Math.max(
+                padding,
+                arenaRect.height - targetSize - padding
+            );
+
+            const x = randomNumber(padding, maximumX);
+            const y = randomNumber(padding, maximumY);
+
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+
+            targetSpawnTime = performance.now();
+            target.classList.add("visible");
+        }
+
+        function scheduleTarget() {
+            clearTimeout(spawnTimeoutId);
+            hideTarget();
+
+            if (!running) {
+                return;
+            }
+
+            const delay = randomNumber(
+                MIN_SPAWN_DELAY,
+                MAX_SPAWN_DELAY
+            );
+
+            spawnTimeoutId = window.setTimeout(
+                showTarget,
+                delay
+            );
+        }
+
+        function createMissMarker(event) {
+            const arenaRect =
+                arena.getBoundingClientRect();
+
+            const marker = document.createElement("div");
+            marker.className = "miss-marker";
+
+            marker.style.left =
+                `${event.clientX - arenaRect.left}px`;
+
+            marker.style.top =
+                `${event.clientY - arenaRect.top}px`;
+
+            arena.appendChild(marker);
+
+            window.setTimeout(() => {
+                marker.remove();
+            }, 450);
+        }
+
+        function updateTimer() {
+            if (!running) {
+                return;
+            }
+
+            const remaining =
+                roundEndTime - performance.now();
+
+            updateStats(remaining);
+
+            if (remaining <= 0) {
+                finishRound();
+                return;
+            }
+
+            animationFrameId =
+                requestAnimationFrame(updateTimer);
+        }
+
+        function sleep(milliseconds) {
+            return new Promise((resolve) => {
+                window.setTimeout(resolve, milliseconds);
+            });
+        }
+
+        async function startRound() {
+            if (running) {
+                return;
+            }
+
+            clearTimeout(spawnTimeoutId);
+            cancelAnimationFrame(animationFrameId);
+            hideTarget();
+
+            hits = 0;
+            misses = 0;
+            reactionTimes = [];
+
+            updateStats();
+            resultGrid.hidden = true;
+
+            startButton.disabled = true;
+            startButton.hidden = true;
+
+            menuLabel.textContent = "Приготовься";
+            menuDescription.textContent =
+                "Цели начнут появляться после обратного отсчёта.";
+
+            for (let number = 3; number >= 1; number -= 1) {
+                menuTitle.innerHTML = number;
+                await sleep(650);
+            }
+
+            menuTitle.innerHTML = "GO!";
+            await sleep(350);
+
+            overlay.classList.add("hidden");
+
+            running = true;
+            arena.classList.add("running");
+
+            roundEndTime =
+                performance.now() + ROUND_DURATION;
+
+            scheduleTarget();
+            updateTimer();
+        }
+
+        function finishRound() {
+            running = false;
+
+            clearTimeout(spawnTimeoutId);
+            cancelAnimationFrame(animationFrameId);
+
+            hideTarget();
+            arena.classList.remove("running");
+
+            if (hits > bestScore) {
+                bestScore = hits;
+
+                localStorage.setItem(
+                    "aimTrainerBestScore",
+                    String(bestScore)
+                );
+            }
+
+            const averageReaction =
+                calculateAverageReaction();
+
+            updateStats(0);
+
+            resultHits.textContent = hits;
+            resultAccuracy.textContent =
+                `${calculateAccuracy()}%`;
+
+            resultReaction.textContent =
+                averageReaction === null
+                    ? "—"
+                    : `${averageReaction} мс`;
+
+            menuLabel.textContent =
+                hits >= bestScore && hits > 0
+                    ? "Новый рекорд"
+                    : "Раунд завершён";
+
+            menuTitle.innerHTML = `${hits}<br>ЦЕЛЕЙ`;
+
+            menuDescription.textContent =
+                "Результат сохранён. Запусти ещё один раунд и попробуй улучшить скорость реакции.";
+
+            resultGrid.hidden = false;
+
+            startButton.textContent = "Играть ещё раз";
+            startButton.disabled = false;
+            startButton.hidden = false;
+
+            overlay.classList.remove("hidden");
+        }
+
+        target.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (
+                !running ||
+                !target.classList.contains("visible")
+            ) {
+                return;
+            }
+
+            const reaction =
+                performance.now() - targetSpawnTime;
+
+            hits += 1;
+            reactionTimes.push(reaction);
+
+            updateStats(
+                roundEndTime - performance.now()
+            );
+
+            scheduleTarget();
+        });
+
+        arena.addEventListener("pointerdown", (event) => {
+            if (!running) {
+                return;
+            }
+
+            misses += 1;
+            createMissMarker(event);
+
+            updateStats(
+                roundEndTime - performance.now()
+            );
+        });
+
+        startButton.addEventListener(
+            "click",
+            startRound
+        );
+
+        updateStats();
+    </script>
+</body>
+</html>
