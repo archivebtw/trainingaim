@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080a12" />
+  <title>IQ TEST — by @archivebtw</title>
+  <style>
+    :root {
+      --bg: #070810;
+      --card: rgba(15, 18, 33, 0.78);
+      --card-strong: rgba(20, 24, 43, 0.96);
+      --text: #f7f8ff;
+      --muted: #9da5bf;
+      --line: rgba(255, 255, 255, 0.09);
+      --accent: #8b5cf6;
+      --accent-2: #22d3ee;
+      --success: #34d399;
+      --danger: #fb7185;
+      --shadow: 0 32px 90px rgba(0, 0, 0, 0.46);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 30%),
+        radial-gradient(circle at 85% 75%, rgba(34, 211, 238, 0.13), transparent 28%),
+        linear-gradient(145deg, #05060b 0%, #090b16 48%, #05060b 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
+    }
+
+    .orb {
+      position: fixed;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.18;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      left: -120px;
+      top: -100px;
+      background: var(--accent);
+    }
+
+    .orb.two {
+      right: -130px;
+      bottom: -120px;
+      background: var(--accent-2);
+      animation-delay: -5s;
+    }
+
+    @keyframes drift {
+      to { transform: translate3d(38px, 26px, 0) scale(1.12); }
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 20px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background:
+        linear-gradient(135deg, rgba(139,92,246,.95), rgba(34,211,238,.88));
+      box-shadow: 0 10px 30px rgba(139,92,246,.28);
+    }
+
+    .brand-mark svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .header-badge {
+      padding: 9px 13px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      backdrop-filter: blur(16px);
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 30px 0 46px;
+    }
+
+    .quiz-shell {
+      width: min(760px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(160deg, rgba(24, 28, 48, .84), rgba(10, 12, 23, .9));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .quiz-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(125deg, rgba(255,255,255,.07), transparent 24%);
+    }
+
+    .top-line {
+      height: 3px;
+      background: rgba(255,255,255,.07);
+    }
+
+    .top-line-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(34, 211, 238, .35);
+      transition: width .45s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .content {
+      padding: clamp(24px, 5vw, 48px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .screen {
+      display: none;
+      animation: reveal .45s ease both;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #b9c1da;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0;
+      letter-spacing: -.055em;
+      line-height: .98;
+    }
+
+    h1 {
+      font-size: clamp(46px, 9vw, 82px);
+      max-width: 650px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.05;
+    }
+
+    .gradient-text {
+      background: linear-gradient(100deg, #ffffff 0%, #bba8ff 48%, #61e7ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .intro-text {
+      max-width: 590px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.65;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0 34px;
+    }
+
+    .meta-chip {
+      padding: 10px 13px;
+      color: #cbd1e5;
+      font-size: 13px;
+      font-weight: 750;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 58px;
+      border: 0;
+      border-radius: 17px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      cursor: pointer;
+      background: linear-gradient(100deg, #7c3aed, #8b5cf6 42%, #0891b2);
+      box-shadow: 0 18px 40px rgba(124, 58, 237, .26);
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 48px rgba(124, 58, 237, .34);
+      filter: brightness(1.08);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .counter {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .timer {
+      min-width: 58px;
+      padding: 8px 10px;
+      text-align: center;
+      color: #dbeafe;
+      font-size: 13px;
+      font-weight: 900;
+      border: 1px solid rgba(34,211,238,.22);
+      border-radius: 10px;
+      background: rgba(34,211,238,.07);
+    }
+
+    .question {
+      min-height: 104px;
+      margin-bottom: 28px;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.22;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-btn {
+      width: 100%;
+      min-height: 64px;
+      padding: 13px 16px;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      color: #e9ecf7;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.035);
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: rgba(139,92,246,.5);
+      background: rgba(139,92,246,.1);
+    }
+
+    .answer-btn:disabled {
+      cursor: default;
+    }
+
+    .answer-key {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #bfc6dc;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.045);
+    }
+
+    .answer-text {
+      font-size: 15px;
+      font-weight: 720;
+      line-height: 1.35;
+    }
+
+    .answer-btn.correct {
+      border-color: rgba(52, 211, 153, .65);
+      background: rgba(52, 211, 153, .11);
+    }
+
+    .answer-btn.wrong {
+      border-color: rgba(251, 113, 133, .62);
+      background: rgba(251, 113, 133, .11);
+    }
+
+    .result-score {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin: 18px 0 6px;
+    }
+
+    .score-number {
+      font-size: clamp(78px, 16vw, 134px);
+      font-weight: 950;
+      letter-spacing: -.09em;
+      line-height: .9;
+      background: linear-gradient(120deg, #fff 6%, #bca7ff 50%, #58e4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .score-label {
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .result-title {
+      margin-top: 24px;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+
+    .result-description {
+      margin: 10px 0 28px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .stat {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      margin-bottom: 5px;
+    }
+
+    .stat strong {
+      font-size: 20px;
+    }
+
+
+    .paywall {
+      text-align: center;
+      padding: 8px 0 2px;
+    }
+
+    .lock-icon {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 26px;
+      font-size: 38px;
+      border: 1px solid rgba(139, 92, 246, .35);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.15), transparent 38%),
+        linear-gradient(145deg, rgba(139,92,246,.28), rgba(34,211,238,.12));
+      box-shadow: 0 20px 55px rgba(124,58,237,.22);
+    }
+
+    .paywall-title {
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: clamp(30px, 6vw, 54px);
+      line-height: 1.04;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+
+    .paywall-price {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 138px;
+      margin: 24px auto 18px;
+      padding: 13px 20px;
+      border-radius: 16px;
+      font-size: 26px;
+      font-weight: 950;
+      letter-spacing: -.03em;
+      color: #ffffff;
+      border: 1px solid rgba(34,211,238,.27);
+      background: rgba(34,211,238,.08);
+    }
+
+    .paywall-description {
+      max-width: 520px;
+      margin: 0 auto 28px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      color: #cbd1e5;
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+      background: rgba(255,255,255,.035);
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .secondary-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.07);
+    }
+
+    .disclaimer {
+      margin: 24px 0 0;
+      color: #777f99;
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    footer {
+      padding: 0 0 26px;
+      color: #6f7690;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    footer strong {
+      color: #bdc3d8;
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+      }
+
+      header {
+        padding-top: 16px;
+      }
+
+      .header-badge {
+        display: none;
+      }
+
+      main {
+        padding-top: 14px;
+      }
+
+      .quiz-shell {
+        border-radius: 24px;
+      }
+
+      .content {
+        padding: 26px 18px 24px;
+      }
+
+      .question {
+        min-height: 116px;
+      }
+
+      .answer-btn {
+        min-height: 60px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M9 4.5 4.8 9 9 13.5M15 4.5 19.2 9 15 13.5M13.6 3 10.4 15.2"
+                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.5 19.2h9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        IQ TEST
+      </div>
+      <div class="header-badge">30 вопросов · 4 ответа</div>
+    </header>
+
+    <main>
+      <section class="quiz-shell" aria-live="polite">
+        <div class="top-line"><div class="top-line-fill" id="progressBar"></div></div>
+
+        <div class="content">
+          <div class="screen active" id="startScreen">
+            <p class="eyebrow">Проверка логики и мышления</p>
+            <h1><span class="gradient-text">Насколько высок твой IQ?</span></h1>
+            <p class="intro-text">
+              Ответь на 30 коротких вопросов. В каждом — только один правильный вариант.
+              Результат появится сразу после прохождения.
+            </p>
+
+            <div class="meta-row">
+              <div class="meta-chip">⏱ 15 секунд на вопрос</div>
+              <div class="meta-chip">🧠 Логика, числа, внимание</div>
+              <div class="meta-chip">⚡ Мгновенный результат</div>
+            </div>
+
+            <button class="primary-btn" id="startBtn">НАЧАТЬ ТЕСТ</button>
+            <p class="disclaimer">Развлекательный тест. Результат не является официальной психологической диагностикой.</p>
+          </div>
+
+          <div class="screen" id="quizScreen">
+            <div class="quiz-header">
+              <div class="counter" id="counter">ВОПРОС 1 ИЗ 30</div>
+              <div class="timer" id="timer">15</div>
+            </div>
+
+            <h2 class="question" id="questionText"></h2>
+            <div class="answers" id="answers"></div>
+          </div>
+
+          <div class="screen" id="resultScreen">
+            <div class="paywall">
+              <div class="lock-icon" aria-hidden="true">🔒</div>
+              <p class="eyebrow">Тест завершён</p>
+              <h2 class="paywall-title">
+                <span class="gradient-text">ОПЛАТИТЕ 20 РУБЛЕЙ, ЧТОБЫ УЗНАТЬ РЕЗУЛЬТАТЫ ТЕСТА</span>
+              </h2>
+              <div class="paywall-price">20 ₽</div>
+              <p class="paywall-description">
+                Ваш результат уже рассчитан и временно скрыт. После оплаты откроется итоговый IQ-балл.
+              </p>
+              <button class="primary-btn" id="payBtn">ОПЛАТИТЬ 20 ₽</button>
+              <button class="secondary-btn" id="restartBtn">ПРОЙТИ ТЕСТ ЗАНОВО</button>
+              <p class="disclaimer">Демонстрационная версия: платёжная система пока не подключена.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>by <strong>@archivebtw</strong></footer>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Какое число должно быть следующим: 2, 6, 12, 20, 30, ...?",
+        answers: ["36", "40", "42", "44"],
+        correct: 2
+      },
+      {
+        question: "Все зоры — лиры. Некоторые лиры — моры. Что точно верно?",
+        answers: ["Все моры — зоры", "Некоторые зоры — моры", "Ни один зор не может быть мором", "Нельзя точно определить связь зоров и моров"],
+        correct: 3
+      },
+      {
+        question: "Найди лишнее слово.",
+        answers: ["Квадрат", "Треугольник", "Круг", "Куб"],
+        correct: 3
+      },
+      {
+        question: "Если 5 станков делают 5 деталей за 5 минут, сколько времени 100 станкам нужно для 100 деталей?",
+        answers: ["5 минут", "20 минут", "100 минут", "500 минут"],
+        correct: 0
+      },
+      {
+        question: "Какое число пропущено: 1, 1, 2, 3, 5, 8, 13, ...?",
+        answers: ["18", "20", "21", "26"],
+        correct: 2
+      },
+      {
+        question: "У Ани 3 сестры. У каждой сестры есть один общий брат. Сколько всего детей в семье?",
+        answers: ["4", "5", "6", "7"],
+        correct: 1
+      },
+      {
+        question: "Выбери пару с такой же связью: КНИГА — ЧИТАТЬ.",
+        answers: ["Музыка — слушать", "Ложка — тарелка", "Дверь — окно", "Река — мост"],
+        correct: 0
+      },
+      {
+        question: "Какое число не подходит к остальным?",
+        answers: ["16", "25", "36", "48"],
+        correct: 3
+      },
+      {
+        question: "Часы показывают 3:15. Какой примерно угол между стрелками?",
+        answers: ["0°", "7,5°", "15°", "30°"],
+        correct: 1
+      },
+      {
+        question: "Продолжи последовательность букв: А, В, Д, З, ...",
+        answers: ["И", "К", "Л", "М"],
+        correct: 1
+      },
+      {
+        question: "В ящике по 4 красных, синих и зелёных носка. Сколько носков нужно достать в темноте, чтобы гарантированно получить пару одного цвета?",
+        answers: ["2", "3", "4", "5"],
+        correct: 2
+      },
+      {
+        question: "Если вчера было за два дня до понедельника, какой день сегодня?",
+        answers: ["Суббота", "Воскресенье", "Понедельник", "Вторник"],
+        correct: 1
+      },
+      {
+        question: "Продолжи ряд: 3, 9, 27, 81, ...",
+        answers: ["162", "243", "324", "729"],
+        correct: 1
+      },
+      {
+        question: "Какое слово можно составить из букв О, К, Н, О?",
+        answers: ["КОН", "ОКНО", "НОК", "КОНО"],
+        correct: 1
+      },
+      {
+        question: "Если все фламы красные, а этот предмет не красный, может ли он быть фламом?",
+        answers: ["Да, всегда", "Нет", "Только ночью", "Недостаточно данных"],
+        correct: 1
+      },
+      {
+        question: "Какое число должно стоять вместо вопроса: 4, 7, 13, 25, 49, ?",
+        answers: ["73", "89", "97", "101"],
+        correct: 2
+      },
+      {
+        question: "Два отца и два сына съели три яблока, каждому досталось по одному. Сколько было людей?",
+        answers: ["2", "3", "4", "5"],
+        correct: 1
+      },
+      {
+        question: "Какой символ продолжает чередование: ○, □, ○, □, ○, ...?",
+        answers: ["△", "□", "○", "◇"],
+        correct: 1
+      },
+      {
+        question: "Если перевернуть число 69 на 180°, что получится?",
+        answers: ["69", "96", "66", "99"],
+        correct: 0
+      },
+      {
+        question: "Найди аналогию: ПТИЦА относится к ГНЕЗДУ, как ПЧЕЛА относится к...",
+        answers: ["Норе", "Улью", "Лесу", "Стае"],
+        correct: 1
+      },
+      {
+        question: "Сколько месяцев в году имеют 28 дней?",
+        answers: ["1", "2", "6", "12"],
+        correct: 3
+      },
+      {
+        question: "Какое число пропущено: 64, 32, 16, 8, ...?",
+        answers: ["2", "3", "4", "6"],
+        correct: 2
+      },
+      {
+        question: "У прямоугольника отрезали один угол. Сколько углов стало?",
+        answers: ["3", "4", "5", "6"],
+        correct: 2
+      },
+      {
+        question: "Какое слово лишнее?",
+        answers: ["Яблоко", "Груша", "Морковь", "Слива"],
+        correct: 2
+      },
+      {
+        question: "Если сегодня среда, какой день будет через 10 дней?",
+        answers: ["Пятница", "Суббота", "Воскресенье", "Понедельник"],
+        correct: 1
+      },
+      {
+        question: "Продолжи ряд: 1, 4, 9, 16, 25, ...",
+        answers: ["30", "32", "36", "49"],
+        correct: 2
+      },
+      {
+        question: "В семье пять дочерей. У каждой есть один общий брат. Сколько детей в семье?",
+        answers: ["5", "6", "10", "11"],
+        correct: 1
+      },
+      {
+        question: "Какое число при умножении само на себя даёт 144?",
+        answers: ["10", "11", "12", "14"],
+        correct: 2
+      },
+      {
+        question: "Что тяжелее: килограмм железа или килограмм ваты?",
+        answers: ["Железо", "Вата", "Одинаково", "Зависит от температуры"],
+        correct: 2
+      },
+      {
+        question: "Найди пропущенное число: 10, 8, 11, 9, 12, 10, ...",
+        answers: ["11", "12", "13", "14"],
+        correct: 2
+      },
+    ];
+
+    const screens = {
+      start: document.getElementById("startScreen"),
+      quiz: document.getElementById("quizScreen"),
+      result: document.getElementById("resultScreen")
+    };
+
+    const progressBar = document.getElementById("progressBar");
+    const counter = document.getElementById("counter");
+    const timerEl = document.getElementById("timer");
+    const questionText = document.getElementById("questionText");
+    const answersEl = document.getElementById("answers");
+
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let timeLeft = 15;
+    let timerId = null;
+    let locked = false;
+
+    function showScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function startQuiz() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      progressBar.style.width = "0%";
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      locked = false;
+      clearInterval(timerId);
+      timeLeft = 15;
+      timerEl.textContent = timeLeft;
+      timerEl.style.color = "#dbeafe";
+      timerEl.style.borderColor = "rgba(34,211,238,.22)";
+      timerEl.style.background = "rgba(34,211,238,.07)";
+
+      const item = questions[currentQuestion];
+      counter.textContent = `ВОПРОС ${currentQuestion + 1} ИЗ ${questions.length}`;
+      questionText.textContent = item.question;
+      progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+      answersEl.innerHTML = "";
+
+      item.answers.forEach((answer, index) => {
+        const button = document.createElement("button");
+        button.className = "answer-btn";
+        button.innerHTML = `
+          <span class="answer-key">${String.fromCharCode(65 + index)}</span>
+          <span class="answer-text">${answer}</span>
+        `;
+        button.addEventListener("click", () => selectAnswer(index));
+        answersEl.appendChild(button);
+      });
+
+      timerId = setInterval(() => {
+        timeLeft -= 1;
+        timerEl.textContent = timeLeft;
+
+        if (timeLeft <= 5) {
+          timerEl.style.color = "#fecdd3";
+          timerEl.style.borderColor = "rgba(251,113,133,.35)";
+          timerEl.style.background = "rgba(251,113,133,.08)";
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          selectAnswer(-1);
+        }
+      }, 1000);
+    }
+
+    function selectAnswer(selectedIndex) {
+      if (locked) return;
+      locked = true;
+      clearInterval(timerId);
+
+      const item = questions[currentQuestion];
+      const buttons = [...answersEl.querySelectorAll(".answer-btn")];
+      buttons.forEach(button => button.disabled = true);
+
+      if (selectedIndex === item.correct) {
+        correctAnswers += 1;
+      }
+
+      buttons[item.correct]?.classList.add("correct");
+
+      if (selectedIndex >= 0 && selectedIndex !== item.correct) {
+        buttons[selectedIndex]?.classList.add("wrong");
+      }
+
+      setTimeout(() => {
+        currentQuestion += 1;
+
+        if (currentQuestion < questions.length) {
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 760);
+    }
+
+    function finishQuiz() {
+      clearInterval(timerId);
+      progressBar.style.width = "100%";
+
+      const hiddenAccuracy = Math.round((correctAnswers / questions.length) * 100);
+      const hiddenIq = Math.max(
+        70,
+        Math.min(145, 70 + Math.round(correctAnswers * 2.4) + (correctAnswers === questions.length ? 3 : 0))
+      );
+
+      sessionStorage.setItem("archivebtwIqResult", String(hiddenIq));
+      sessionStorage.setItem("archivebtwIqAccuracy", String(hiddenAccuracy));
+      sessionStorage.setItem("archivebtwIqCorrect", String(correctAnswers));
+
+      showScreen("result");
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startQuiz);
+    document.getElementById("restartBtn").addEventListener("click", startQuiz);
+    document.getElementById("payBtn").addEventListener("click", () => {
+      alert("Платёжная система пока не подключена.");
+    });
+
+    document.addEventListener("keydown", event => {
+      if (!screens.quiz.classList.contains("active") || locked) return;
+      const key = event.key.toLowerCase();
+      const index = ["a", "b", "c", "d", "ф", "и", "с", "в"].indexOf(key);
+      if (index >= 0) selectAnswer(index % 4);
+    });
+  </script>
+</body>
+</html>
