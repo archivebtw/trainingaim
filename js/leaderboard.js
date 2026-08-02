@@ -173,7 +173,7 @@
 
     if (currentTab === "local") {
       render(readLocalScores());
-      elements.status.textContent = "Результаты сохранены только в этом браузере";
+      elements.status.textContent = "Рейтинговые результаты этого браузера";
       return;
     }
 
@@ -187,7 +187,7 @@
       }
 
       render(online);
-      elements.status.textContent = "Общий рейтинг игроков";
+      elements.status.textContent = "Общий рейтинг Fair Play";
     } catch (error) {
       console.error(error);
       render(readLocalScores());
@@ -196,7 +196,13 @@
   }
 
   document.addEventListener("aim:round-end", async (event) => {
-    const { entry } = event.detail;
+    const { entry, mode } = event.detail;
+
+    if (mode !== "ranked") {
+      elements.status.textContent = "Focus Rush не влияет на общий рейтинг";
+      return;
+    }
+
     saveLocal(entry);
 
     try {
