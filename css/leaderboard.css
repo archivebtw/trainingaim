@@ -1,0 +1,152 @@
+.leaderboard {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.leaderboard-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.leaderboard h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.refresh-button {
+  min-width: 52px;
+}
+
+.status {
+  margin: 5px 0 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.profile-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.profile-mini div {
+  padding: 9px 5px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-mini span {
+  display: block;
+  color: var(--muted);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.profile-mini strong {
+  display: block;
+  margin-top: 3px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tab {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tab.active {
+  border-color: rgba(255, 59, 92, 0.34);
+  color: #fff;
+  background: rgba(255, 59, 92, 0.13);
+}
+
+.scores {
+  display: grid;
+  min-height: 0;
+  overflow: auto;
+  gap: 7px;
+}
+
+.score {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.score.leader {
+  border-color: rgba(255, 209, 102, 0.34);
+}
+
+.score.me {
+  border-color: rgba(66, 245, 164, 0.34);
+  background: rgba(66, 245, 164, 0.05);
+}
+
+.rank {
+  color: #ffb4c0;
+  font-weight: 950;
+}
+
+.player {
+  min-width: 0;
+}
+
+.player strong,
+.player small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.rank-tag {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.points {
+  text-align: right;
+  font-weight: 950;
+}
+
+.empty {
+  padding: 24px 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .leaderboard {
+    min-height: 420px;
+  }
+}
