@@ -5,27 +5,27 @@
   const ACHIEVEMENTS = "aimMotionAchievementsV1";
   const W = 1000;
   const H = 625;
+
   const MODES = {
     moving: { title: "Moving Target", duration: 30000, size: 70, speed: 235 },
     tracking: { title: "Tracking", duration: 30000, size: 96, speed: 145 },
     flick: { title: "Flick Chain", duration: 30000, size: 62, chain: 4 }
   };
+
   const PROGRAMS = {
-    warmup: { title: "Разминка", stages: [["speed", 60000], ["precision", 60000], ["tracking", 60000]] },
-    precision: { title: "Точность", stages: [["precision", 100000], ["microshot", 100000], ["flick", 100000]] },
-    full: { title: "Полная тренировка", stages: [["speed", 120000], ["precision", 120000], ["moving", 120000], ["tracking", 120000], ["microshot", 120000]] }
+    warmup: { title: "Разминка", stages: [["moving", 60000], ["tracking", 60000], ["flick", 60000]] },
+    precision: { title: "Точность", stages: [["flick", 100000], ["moving", 100000], ["tracking", 100000]] },
+    full: { title: "Полная тренировка", stages: [["moving", 120000], ["tracking", 120000], ["flick", 120000], ["moving", 120000], ["tracking", 120000]] }
   };
 
   const id = (name) => document.getElementById(name);
   const ui = {
-    arena: id("arena"), field: id("playfield"), target: id("target"), overlay: id("overlay"),
-    start: id("startButton"), name: id("playerName"), eyebrow: id("menuEyebrow"), title: id("menuTitle"),
-    description: id("menuDescription"), results: id("resultGrid"), resultHits: id("resultHits"),
-    resultAccuracy: id("resultAccuracy"), resultReaction: id("resultReaction"), hud: id("modeHud"),
-    hits: id("hitsValue"), misses: id("missesValue"), accuracy: id("accuracyValue"), reaction: id("reactionValue"),
-    time: id("timeValue"), open: id("motionOpenButton"), modal: id("motionModal"), close: id("motionCloseButton"),
-    radar: id("motionRadar"), skills: id("motionSkills"), achievements: id("motionAchievements"),
-    recommendation: id("motionRecommendation"), status: id("motionProgramStatus")
+    field: id("playfield"), target: id("target"), overlay: id("overlay"), start: id("startButton"),
+    name: id("playerName"), eyebrow: id("menuEyebrow"), title: id("menuTitle"), description: id("menuDescription"),
+    results: id("resultGrid"), resultHits: id("resultHits"), resultAccuracy: id("resultAccuracy"), resultReaction: id("resultReaction"),
+    hud: id("modeHud"), hits: id("hitsValue"), misses: id("missesValue"), accuracy: id("accuracyValue"), reaction: id("reactionValue"), time: id("timeValue"),
+    open: id("motionOpenButton"), modal: id("motionModal"), close: id("motionCloseButton"), radar: id("motionRadar"), skills: id("motionSkills"),
+    achievements: id("motionAchievements"), recommendation: id("motionRecommendation"), status: id("motionProgramStatus"), rank: id("rankBanner")
   };
 
   let selected = null;
@@ -53,19 +53,32 @@
 
   const read = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
   const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-  const profile = () => ({ speed: 0, accuracy: 0, reaction: 0, stability: 0, tracking: 0, flick: 0, movingHits: 0, longestTracking: 0, programs: 0, ...read(STORE, {}) });
   const average = (list) => list.length ? Math.round(list.reduce((a, b) => a + b, 0) / list.length) : 0;
-  const fieldScale = () => Math.min(ui.field.clientWidth / W, ui.field.clientHeight / H);
-  const point = (event) => { const r = ui.field.getBoundingClientRect(); return { x: (event.clientX - r.left) / r.width * W, y: (event.clientY - r.top) / r.height * H }; };
-  const inside = (p, t = target) => t && (p.x - t.x - t.size / 2) ** 2 + (p.y - t.y - t.size / 2) ** 2 <= (t.size / 2) ** 2;
+  const profile = () => ({ speed: 0, accuracy: 0, reaction: 0, stability: 0, tracking: 0, flick: 0, movingHits: 0, longestTracking: 0, programs: 0, ...read(STORE, {}) });
+  const scale = () => Math.min(ui.field.clientWidth / W, ui.field.clientHeight / H);
+  const point = (event) => { const rect = ui.field.getBoundingClientRect(); return { x: (event.clientX - rect.left) / rect.width * W, y: (event.clientY - rect.top) / rect.height * H }; };
+  const inside = (p, item = target) => item && (p.x - item.x - item.size / 2) ** 2 + (p.y - item.y - item.size / 2) ** 2 <= (item.size / 2) ** 2;
+
+  function setProgramLabels() {
+    const labels = {
+      warmup: "3 минуты · Moving → Tracking → Flick",
+      precision: "5 минут · Flick → Moving → Tracking",
+      full: "10 минут · пять этапов движения"
+    };
+    document.querySelectorAll("[data-motion-program]").forEach((button) => {
+      const span = button.querySelector("span");
+      if (span) span.textContent = labels[button.dataset.motionProgram] || span.textContent;
+    });
+  }
 
   function drawTarget() {
     if (!target) return;
-    const scale = fieldScale();
-    ui.target.style.setProperty("--size", `${target.size * scale}px`);
-    ui.target.style.left = `${target.x * scale}px`;
-    ui.target.style.top = `${target.y * scale}px`;
+    const k = scale();
+    ui.target.style.setProperty("--size", `${target.size * k}px`);
+    ui.target.style.left = `${target.x * k}px`;
+    ui.target.style.top = `${target.y * k}px`;
     ui.target.classList.add("visible", "motion-target");
+    ui.target.classList.toggle("tracking-target", mode === "tracking");
   }
 
   function hideTarget() {
@@ -91,7 +104,6 @@
       turnAt: performance.now() + 900 + Math.random() * 800
     };
     drawTarget();
-    if (mode === "tracking") ui.target.classList.add("tracking-target");
   }
 
   function clearFlick() {
@@ -110,15 +122,15 @@
       const item = { x: 35 + Math.random() * (W - cfg.size - 70), y: 35 + Math.random() * (H - cfg.size - 70), size: cfg.size };
       if (flickTargets.every((old) => Math.hypot(old.x - item.x, old.y - item.y) > 170)) flickTargets.push(item);
     }
-    const scale = fieldScale();
+    const k = scale();
     flickTargets.forEach((item, index) => {
       const node = document.createElement("button");
       node.type = "button";
       node.className = `flick-target${index === 0 ? " active" : ""}`;
       node.textContent = index + 1;
-      node.style.width = node.style.height = `${item.size * scale}px`;
-      node.style.left = `${item.x * scale}px`;
-      node.style.top = `${item.y * scale}px`;
+      node.style.width = node.style.height = `${item.size * k}px`;
+      node.style.left = `${item.x * k}px`;
+      node.style.top = `${item.y * k}px`;
       ui.field.appendChild(node);
       flickNodes.push(node);
     });
@@ -133,7 +145,9 @@
     if (target.y <= 0 || target.y + target.size >= H) { target.y = Math.max(0, Math.min(H - target.size, target.y)); target.vy *= -1; }
     if (now >= target.turnAt) {
       const v = velocity(MODES[mode].speed * (0.9 + Math.random() * 0.25));
-      target.vx = v.vx; target.vy = v.vy; target.turnAt = now + 850 + Math.random() * 900;
+      target.vx = v.vx;
+      target.vy = v.vy;
+      target.turnAt = now + 850 + Math.random() * 900;
     }
     drawTarget();
   }
@@ -154,7 +168,9 @@
 
   function updateHud(remaining) {
     const attempts = hits + misses;
-    const accuracy = mode === "tracking" ? Math.round(trackedMs / Math.max(1, performance.now() - startedAt) * 100) : attempts ? Math.round(hits / attempts * 100) : 100;
+    const accuracy = mode === "tracking"
+      ? Math.round(trackedMs / Math.max(1, performance.now() - startedAt) * 100)
+      : attempts ? Math.round(hits / attempts * 100) : 100;
     ui.time.textContent = (Math.max(0, remaining) / 1000).toFixed(1);
     ui.hits.textContent = hits;
     ui.misses.textContent = misses;
@@ -197,7 +213,10 @@
     ui.start.disabled = false;
 
     document.dispatchEvent(new CustomEvent("aim:round-end", { detail: { entry, hits, misses, reaction: reaction === 9999 ? null : reaction, accuracy, mode, ranked: false, motion, duration: elapsed, program } }));
+    ui.rank.hidden = false;
+    ui.rank.textContent = mode === "tracking" ? `🛰️ Tracking · ${accuracy}% удержания` : mode === "flick" ? `⚡ Flick Chain · ${completedChains} цепочек` : `🎯 Moving Target · ${hits} попаданий`;
     updateProfile(entry, motion);
+
     const finishedProgram = program;
     program = null;
     if (finishedProgram) advanceProgram(finishedProgram, entry);
@@ -227,7 +246,7 @@
     pointer.active = false;
     wasInside = false;
     ui.results.classList.remove("show");
-    id("rankBanner").hidden = true;
+    ui.rank.hidden = true;
     ui.start.disabled = true;
     ui.overlay.classList.add("hidden");
     ui.hud.textContent = `${MODES[mode].title}${program ? ` · ${program.index + 1}/${program.total}` : ""}`;
@@ -246,14 +265,17 @@
     const cfg = MODES[value];
     ui.eyebrow.textContent = "Motion Lab";
     ui.title.textContent = cfg.title.toUpperCase();
-    ui.description.textContent = value === "tracking" ? "Удерживай указатель внутри движущейся цели." : value === "flick" ? "Нажимай цели строго по порядку." : "Перехватывай цель, которая меняет направление и отражается от границ.";
+    ui.description.textContent = value === "tracking"
+      ? "Удерживай указатель внутри движущейся цели."
+      : value === "flick" ? "Нажимай цели строго по порядку."
+      : "Перехватывай цель, которая меняет направление и отражается от границ.";
     ui.start.textContent = `Начать ${cfg.title}`;
     document.querySelectorAll("[data-game-mode]").forEach((button) => button.classList.toggle("active", button.dataset.gameMode === value));
   }
 
   function handleFlick(p) {
     const item = flickTargets[flickIndex];
-    if (!inside(p, item)) { misses += 1; return; }
+    if (!inside(p, item)) { misses += 1; document.dispatchEvent(new CustomEvent("aim:miss", { detail: { mode, misses } })); return; }
     const now = performance.now();
     reactions.push(now - lastHitAt);
     lastHitAt = now;
@@ -263,7 +285,11 @@
     flickIndex += 1;
     flickNodes[flickIndex]?.classList.add("active");
     document.dispatchEvent(new CustomEvent("aim:hit", { detail: { mode, hits } }));
-    if (flickIndex >= flickTargets.length) { completedChains += 1; clearFlick(); setTimeout(() => running && spawnFlick(), 90); }
+    if (flickIndex >= flickTargets.length) {
+      completedChains += 1;
+      clearFlick();
+      setTimeout(() => running && spawnFlick(), 90);
+    }
   }
 
   ui.field.addEventListener("pointerdown", (event) => {
@@ -284,27 +310,31 @@
       document.dispatchEvent(new CustomEvent("aim:miss", { detail: { mode, misses } }));
     }
   });
+
   ui.field.addEventListener("pointermove", (event) => { if (running) pointer = { ...point(event), active: true }; });
-  ["pointerup", "pointercancel", "pointerleave"].forEach((type) => ui.field.addEventListener(type, (event) => { if (event.pointerType !== "mouse" || type === "pointerleave") pointer.active = false; }));
+  ["pointerup", "pointercancel", "pointerleave"].forEach((type) => ui.field.addEventListener(type, (event) => {
+    if (event.pointerType !== "mouse" || type === "pointerleave") pointer.active = false;
+  }));
 
   document.querySelectorAll(".motion-mode").forEach((button) => button.addEventListener("click", () => selectMode(button.dataset.gameMode)));
-  ui.start.addEventListener("click", (event) => { if (!selected) return; event.preventDefault(); event.stopImmediatePropagation(); startMotion(); }, true);
+  ui.start.addEventListener("click", (event) => {
+    if (!selected) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    startMotion();
+  }, true);
 
   function skillValues() {
     const p = profile();
-    return {
-      speed: p.speed,
-      accuracy: p.accuracy,
-      reaction: p.reaction,
-      stability: p.stability,
-      tracking: p.tracking,
-      flick: p.flick
-    };
+    return { speed: p.speed, accuracy: p.accuracy, reaction: p.reaction, stability: p.stability, tracking: p.tracking, flick: p.flick };
   }
 
   function updateProfile(entry, motion) {
     const p = profile();
-    const stability = reactions.length > 1 ? Math.max(0, Math.round(100 - Math.sqrt(reactions.reduce((sum, value) => sum + (value - average(reactions)) ** 2, 0) / reactions.length) / 5)) : entry.accuracy;
+    const mean = average(reactions);
+    const stability = reactions.length > 1
+      ? Math.max(0, Math.round(100 - Math.sqrt(reactions.reduce((sum, value) => sum + (value - mean) ** 2, 0) / reactions.length) / 5))
+      : entry.accuracy;
     p.speed = Math.max(p.speed, Math.min(100, Math.round(entry.score * 2.2)));
     p.accuracy = Math.max(p.accuracy, entry.accuracy);
     p.reaction = Math.max(p.reaction, entry.reaction === 9999 ? 0 : Math.max(0, Math.round(120 - entry.reaction / 5)));
@@ -345,14 +375,36 @@
     const ctx = canvas.getContext("2d");
     ctx.scale(ratio, ratio);
     const names = Object.keys(values);
-    const cx = rect.width / 2, cy = rect.height / 2, radius = Math.min(rect.width, rect.height) * 0.34;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const radius = Math.min(rect.width, rect.height) * 0.34;
     ctx.clearRect(0, 0, rect.width, rect.height);
     ctx.strokeStyle = "rgba(255,255,255,.12)";
-    for (let ring = 1; ring <= 4; ring++) {
-      ctx.beginPath(); names.forEach((_, i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / names.length; const r = radius * ring / 4; const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.stroke();
+    for (let ring = 1; ring <= 4; ring += 1) {
+      ctx.beginPath();
+      names.forEach((_, index) => {
+        const angle = -Math.PI / 2 + index * Math.PI * 2 / names.length;
+        const r = radius * ring / 4;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        index ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.closePath();
+      ctx.stroke();
     }
-    ctx.fillStyle = "rgba(139,92,246,.28)"; ctx.strokeStyle = "#a78bfa"; ctx.beginPath();
-    names.forEach((name, i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / names.length; const r = radius * values[name] / 100; const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(139,92,246,.28)";
+    ctx.strokeStyle = "#a78bfa";
+    ctx.beginPath();
+    names.forEach((name, index) => {
+      const angle = -Math.PI / 2 + index * Math.PI * 2 / names.length;
+      const r = radius * values[name] / 100;
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      index ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
   }
 
   function render() {
@@ -362,48 +414,52 @@
     const unlocked = new Set(read(ACHIEVEMENTS, []));
     ui.achievements.innerHTML = achievementList.map(([key, icon, title, text]) => `<div class="motion-achievement${unlocked.has(key) ? " unlocked" : ""}"><i>${icon}</i><div><strong>${title}</strong><span>${text}</span></div></div>`).join("");
     const weakest = Object.entries(values).sort((a, b) => a[1] - b[1])[0];
-    ui.recommendation.textContent = weakest ? `Слабая сторона: ${labels[weakest[0]]} (${weakest[1]}). Рекомендуется ${weakest[0] === "tracking" ? "Tracking" : weakest[0] === "flick" ? "Flick Chain" : weakest[0] === "accuracy" ? "Precision" : "Moving Target"}.` : "Заверши первый раунд.";
+    ui.recommendation.textContent = weakest
+      ? `Слабая сторона: ${labels[weakest[0]]} (${weakest[1]}). Рекомендуется ${weakest[0] === "tracking" ? "Tracking" : weakest[0] === "flick" ? "Flick Chain" : weakest[0] === "accuracy" ? "Precision" : "Moving Target"}.`
+      : "Заверши первый раунд.";
     requestAnimationFrame(() => drawRadar(values));
   }
 
-  function open() { ui.modal.classList.add("show"); ui.modal.setAttribute("aria-hidden", "false"); render(); }
-  function close() { if (running) return; ui.modal.classList.remove("show"); ui.modal.setAttribute("aria-hidden", "true"); }
+  function open() {
+    ui.modal.classList.add("show");
+    ui.modal.setAttribute("aria-hidden", "false");
+    render();
+  }
+
+  function close() {
+    if (running) return;
+    ui.modal.classList.remove("show");
+    ui.modal.setAttribute("aria-hidden", "true");
+  }
 
   function startProgram(key) {
     const cfg = PROGRAMS[key];
     if (!cfg) return;
     close();
-    runStage({ key, title: cfg.title, stages: cfg.stages, index: 0, results: [] });
+    runStage({ key, title: cfg.title, stages: cfg.stages, index: 0, results: [], total: cfg.stages.length });
   }
 
   function runStage(info) {
     const [stageMode, duration] = info.stages[info.index];
-    if (MODES[stageMode]) {
-      selected = stageMode;
-      selectMode(stageMode);
-      startMotion({ duration, program: { ...info, total: info.stages.length } });
-    } else if (window.AimTrainer?.game?.setMode && window.AimTrainer?.game?.startRound) {
-      selected = null;
-      window.AimTrainer.game.setMode(stageMode);
-      window.AimTrainer.game.startRound({ mode: stageMode, durationOverride: duration, program: { ...info, total: info.stages.length }, skipCountdown: info.index > 0 });
-    }
-    ui.status.textContent = `${info.title}: этап ${info.index + 1}/${info.stages.length}`;
+    selected = stageMode;
+    selectMode(stageMode);
+    ui.status.textContent = `${info.title}: этап ${info.index + 1}/${info.total}`;
+    startMotion({ duration, program: info });
   }
 
   function advanceProgram(info, entry) {
     const next = { ...info, results: [...(info.results || []), entry], index: info.index + 1 };
-    if (next.index < next.stages.length) return setTimeout(() => runStage(next), 900);
-    const p = profile(); p.programs += 1; write(STORE, p); unlock(p, { type: "program" });
+    if (next.index < next.stages.length) {
+      setTimeout(() => runStage(next), 900);
+      return;
+    }
+    const p = profile();
+    p.programs += 1;
+    write(STORE, p);
+    unlock(p, { type: "program" });
     ui.status.textContent = `${info.title} завершена · средний результат ${average(next.results.map((item) => item.score))}`;
     open();
   }
-
-  document.addEventListener("aim:round-end", (event) => {
-    const info = event.detail.program;
-    if (!info || MODES[event.detail.mode]) return;
-    updateProfile(event.detail.entry, event.detail.motion || { type: event.detail.mode });
-    setTimeout(() => advanceProgram(info, event.detail.entry), 900);
-  });
 
   ui.open.addEventListener("click", open);
   ui.close.addEventListener("click", close);
@@ -411,6 +467,7 @@
   document.querySelectorAll("[data-motion-program]").forEach((button) => button.addEventListener("click", () => startProgram(button.dataset.motionProgram)));
   window.addEventListener("resize", () => ui.modal.classList.contains("show") && render());
 
+  setProgramLabels();
   window.AimTrainer.motion = { open, close, startProgram, profile };
   render();
 })();
