@@ -4,19 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#08090d">
-  <title>AIM TRAINER — Training Lab</title>
+  <title>AIM TRAINER — Challenge</title>
 
-  <link rel="stylesheet" href="css/main.css?v=1.5.0">
-  <link rel="stylesheet" href="css/leaderboard.css?v=1.5.0">
-  <link rel="stylesheet" href="css/progression.css?v=1.5.0">
-  <link rel="stylesheet" href="css/lab.css?v=1.5.0">
+  <link rel="stylesheet" href="css/main.css?v=1.6.0">
+  <link rel="stylesheet" href="css/leaderboard.css?v=1.6.0">
+  <link rel="stylesheet" href="css/progression.css?v=1.6.0">
+  <link rel="stylesheet" href="css/lab.css?v=1.6.0">
+  <link rel="stylesheet" href="css/challenge.css?v=1.6.0">
 
-  <script src="config.js?v=1.5.0" defer></script>
-  <script src="js/game.js?v=1.5.0" defer></script>
-  <script src="js/leaderboard.js?v=1.5.0" defer></script>
-  <script src="js/combo.js?v=1.5.0" defer></script>
-  <script src="js/progression.js?v=1.5.0" defer></script>
-  <script src="js/lab.js?v=1.5.0" defer></script>
+  <script src="config.js?v=1.6.0" defer></script>
+  <script src="js/game.js?v=1.6.0" defer></script>
+  <script src="js/leaderboard.js?v=1.6.0" defer></script>
+  <script src="js/combo.js?v=1.6.0" defer></script>
+  <script src="js/progression.js?v=1.6.0" defer></script>
+  <script src="js/lab.js?v=1.6.0" defer></script>
+  <script src="js/challenge.js?v=1.6.0" defer></script>
 </head>
 <body>
   <div class="app">
@@ -25,7 +27,7 @@
         <div class="logo">
           <i></i>
           AIM TRAINER
-          <span class="version-tag">v1.5 LAB</span>
+          <span class="version-tag">v1.6 CHALLENGE</span>
           <button class="sound-btn" id="soundButton" type="button" title="Включить или выключить звук">🔊</button>
         </div>
 
@@ -88,6 +90,13 @@
       <div class="status" id="leaderboardStatus">Загрузка результатов…</div>
       <div class="profile-mini"><div><span>Рекорд</span><strong id="profileBest">0</strong></div><div><span>Раундов</span><strong id="profileRounds">0</strong></div><div><span>Серия</span><strong id="profileCombo">0×</strong></div></div>
       <div class="progress-card"><div class="progress-top"><strong class="level-badge" id="levelBadge">Уровень 1</strong><span class="xp-text" id="xpText">0 / 300 XP</span></div><div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div><button class="progress-button" id="progressOpenButton" type="button">Прогресс и задания <span class="progress-dot" id="progressDot">3</span></button></div>
+
+      <div class="challenge-card">
+        <strong>Ежедневное испытание</strong>
+        <span>Одинаковая последовательность для всех · недельный рейтинг · призрак рекорда</span>
+        <button id="challengeOpenButton" type="button">Открыть испытание</button>
+      </div>
+
       <div class="tabs"><button class="tab active" type="button" data-tab="global">Общий</button><button class="tab" type="button" data-tab="local">На устройстве</button></div>
       <div class="scores" id="scores"></div>
     </aside>
@@ -95,7 +104,7 @@
 
   <div class="progress-modal" id="progressModal" aria-hidden="true">
     <div class="progress-window" role="dialog" aria-modal="true" aria-labelledby="progressTitle">
-      <div class="progress-header"><div><div class="eyebrow">Training Lab Update 1.5</div><h2 id="progressTitle">Профиль игрока</h2></div><button class="progress-close" id="progressCloseButton" type="button" aria-label="Закрыть">✕</button></div>
+      <div class="progress-header"><div><div class="eyebrow">Challenge Update 1.6</div><h2 id="progressTitle">Профиль игрока</h2></div><button class="progress-close" id="progressCloseButton" type="button" aria-label="Закрыть">✕</button></div>
       <div class="progress-tabs"><button class="progress-tab active" type="button" data-progress-tab="missions">Задания</button><button class="progress-tab" type="button" data-progress-tab="achievements">Достижения</button><button class="progress-tab" type="button" data-progress-tab="history">История</button></div>
       <section class="progress-pane active" id="progressPane-missions"><div class="mission-list" id="missionList"></div></section>
       <section class="progress-pane" id="progressPane-achievements"><div class="achievement-list" id="achievementList"></div></section>
@@ -118,6 +127,39 @@
         <section class="lab-panel"><h3>Карта попаданий и промахов</h3><canvas class="lab-canvas" id="heatCanvas"></canvas></section>
       </div>
       <div class="lab-recommendation" id="labRecommendation"></div>
+    </div>
+  </div>
+
+  <div class="challenge-modal" id="challengeModal" aria-hidden="true">
+    <div class="challenge-window" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
+      <div class="challenge-head">
+        <div><div class="eyebrow">Challenge Update 1.6</div><h2 id="challengeTitle">Ежедневное испытание — <span id="challengeDate"></span></h2></div>
+        <button class="challenge-close" id="challengeCloseButton" type="button">✕</button>
+      </div>
+
+      <div class="challenge-grid">
+        <section class="challenge-panel">
+          <h3>Испытание дня</h3>
+          <div class="challenge-message">40 фиксированных целей · 25 секунд · одна и та же последовательность у всех игроков.</div>
+          <div class="challenge-metrics">
+            <div class="challenge-metric"><strong id="challengeSeed">—</strong><span>Seed дня</span></div>
+            <div class="challenge-metric"><strong id="challengeStreak">0</strong><span>Серия дней</span></div>
+            <div class="challenge-metric"><strong id="challengeBest">0</strong><span>Личный рекорд</span></div>
+          </div>
+          <div class="challenge-calendar" id="challengeCalendar"></div>
+          <div class="challenge-goal" id="challengeGoal"></div>
+          <div class="challenge-message" id="challengeStatus">Готово к запуску</div>
+          <div class="challenge-actions">
+            <button id="challengeStartButton" type="button">Начать испытание</button>
+            <button class="secondary" id="challengeRefreshButton" type="button">Обновить рейтинг</button>
+          </div>
+        </section>
+
+        <section class="challenge-panel">
+          <h3>Недельный рейтинг</h3>
+          <div class="challenge-list" id="challengeRanking"></div>
+        </section>
+      </div>
     </div>
   </div>
 </body>
