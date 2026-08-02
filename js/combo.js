@@ -59,7 +59,6 @@
     if (!AudioContextClass) return;
 
     audioContext = audioContext || new AudioContextClass();
-
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();
 
@@ -118,9 +117,10 @@
   document.addEventListener("aim:round-end", (event) => {
     const profileBefore = readProfile();
     const score = Number(event.detail.entry.score) || 0;
+    const isRanked = event.detail.mode === "ranked";
 
     const profileAfter = {
-      best: Math.max(profileBefore.best, score),
+      best: isRanked ? Math.max(profileBefore.best, score) : profileBefore.best,
       rounds: profileBefore.rounds + 1,
       combo: Math.max(profileBefore.combo, maxStreak)
     };
@@ -132,8 +132,9 @@
     event.detail.profile = profileAfter;
 
     elements.rankBanner.hidden = false;
-    elements.rankBanner.textContent =
-      `${rankLabel(score)}${score > profileBefore.best ? " · Новый рекорд!" : ""}`;
+    elements.rankBanner.textContent = isRanked
+      ? `${rankLabel(score)}${score > profileBefore.best ? " · Новый рекорд!" : ""}`
+      : "⚡ Focus Rush · личное испытание";
   });
 
   elements.soundButton.addEventListener("click", () => {
