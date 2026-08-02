@@ -4,17 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#08090d">
-  <title>AIM TRAINER — Fair Play</title>
+  <title>AIM TRAINER — Training Lab</title>
 
-  <link rel="stylesheet" href="css/main.css?v=1.4.0">
-  <link rel="stylesheet" href="css/leaderboard.css?v=1.4.0">
-  <link rel="stylesheet" href="css/progression.css?v=1.4.0">
+  <link rel="stylesheet" href="css/main.css?v=1.5.0">
+  <link rel="stylesheet" href="css/leaderboard.css?v=1.5.0">
+  <link rel="stylesheet" href="css/progression.css?v=1.5.0">
+  <link rel="stylesheet" href="css/lab.css?v=1.5.0">
 
-  <script src="config.js?v=1.4.0" defer></script>
-  <script src="js/game.js?v=1.4.0" defer></script>
-  <script src="js/leaderboard.js?v=1.4.0" defer></script>
-  <script src="js/combo.js?v=1.4.0" defer></script>
-  <script src="js/progression.js?v=1.4.0" defer></script>
+  <script src="config.js?v=1.5.0" defer></script>
+  <script src="js/game.js?v=1.5.0" defer></script>
+  <script src="js/leaderboard.js?v=1.5.0" defer></script>
+  <script src="js/combo.js?v=1.5.0" defer></script>
+  <script src="js/progression.js?v=1.5.0" defer></script>
+  <script src="js/lab.js?v=1.5.0" defer></script>
 </head>
 <body>
   <div class="app">
@@ -23,7 +25,7 @@
         <div class="logo">
           <i></i>
           AIM TRAINER
-          <span class="version-tag">v1.4 FAIR</span>
+          <span class="version-tag">v1.5 LAB</span>
           <button class="sound-btn" id="soundButton" type="button" title="Включить или выключить звук">🔊</button>
         </div>
 
@@ -39,35 +41,28 @@
 
       <div class="arena" id="arena">
         <div class="mode-hud" id="modeHud">Рейтинг · Fair Play · мышь</div>
-
         <div class="playfield" id="playfield" aria-label="Игровое поле">
           <button class="target" id="target" type="button" tabindex="-1" aria-hidden="true"></button>
         </div>
 
         <div class="overlay" id="overlay">
           <div class="menu">
-            <div class="eyebrow" id="menuEyebrow">Fair Play</div>
+            <div class="eyebrow" id="menuEyebrow">Training Lab</div>
             <h1 id="menuTitle">РЕЙТИНГ</h1>
-            <p id="menuDescription">
-              Единая виртуальная арена и точная круглая зона попадания.
-              Результат входит в общий рейтинг.
-            </p>
+            <p id="menuDescription">Честное виртуальное поле и точная круглая зона попадания.</p>
 
-            <div class="mode-selector" aria-label="Выбор режима">
-              <button class="mode-button active" type="button" data-game-mode="ranked" aria-pressed="true">
-                <strong>Рейтинг</strong>
-                <span>30 секунд · общий топ</span>
-              </button>
-              <button class="mode-button" type="button" data-game-mode="rush" aria-pressed="false">
-                <strong>Focus Rush</strong>
-                <span>Исчезающие цели · рекорд <b id="rushBest">0</b></span>
-              </button>
+            <div class="mode-selector lab-modes" aria-label="Выбор режима">
+              <button class="mode-button active" type="button" data-game-mode="ranked" aria-pressed="true"><strong>Рейтинг</strong><span>30 секунд · общий топ</span></button>
+              <button class="mode-button" type="button" data-game-mode="rush" aria-pressed="false"><strong>Focus Rush</strong><span>Исчезающие цели · рекорд <b id="rushBest">0</b></span></button>
+              <button class="mode-button" type="button" data-game-mode="precision" aria-pressed="false"><strong>Precision</strong><span>Маленькие цели · точность</span></button>
+              <button class="mode-button" type="button" data-game-mode="speed" aria-pressed="false"><strong>Speed</strong><span>Быстрый темп · крупные цели</span></button>
+              <button class="mode-button" type="button" data-game-mode="microshot" aria-pressed="false"><strong>Microshot</strong><span>Экстремально малые цели</span></button>
             </div>
 
             <div class="fair-info">
-              <span>⚖ Точная круглая зона</span>
+              <span>⚖ Единое поле 16:10</span>
               <span id="inputBadge">Ввод: мышь</span>
-              <span>Поле 16:10</span>
+              <span>Точный круг</span>
             </div>
 
             <div class="result" id="resultGrid">
@@ -77,6 +72,7 @@
             </div>
 
             <div class="rank-banner" id="rankBanner" hidden></div>
+            <button class="lab-analysis-button" id="labOpenButton" type="button" hidden>Разбор раунда</button>
 
             <div class="name-row">
               <input id="playerName" maxlength="20" autocomplete="nickname" placeholder="Введите ник">
@@ -88,70 +84,40 @@
     </section>
 
     <aside class="leaderboard">
-      <div class="leaderboard-head">
-        <div>
-          <div class="eyebrow">Таблица лидеров</div>
-          <h2>Рейтинг</h2>
-        </div>
-        <button class="btn secondary refresh-button" id="refreshButton" type="button" title="Обновить рейтинг">↻</button>
-      </div>
-
+      <div class="leaderboard-head"><div><div class="eyebrow">Таблица лидеров</div><h2>Рейтинг</h2></div><button class="btn secondary refresh-button" id="refreshButton" type="button" title="Обновить рейтинг">↻</button></div>
       <div class="status" id="leaderboardStatus">Загрузка результатов…</div>
-
-      <div class="profile-mini">
-        <div><span>Рекорд</span><strong id="profileBest">0</strong></div>
-        <div><span>Раундов</span><strong id="profileRounds">0</strong></div>
-        <div><span>Серия</span><strong id="profileCombo">0×</strong></div>
-      </div>
-
-      <div class="progress-card">
-        <div class="progress-top">
-          <strong class="level-badge" id="levelBadge">Уровень 1</strong>
-          <span class="xp-text" id="xpText">0 / 300 XP</span>
-        </div>
-        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
-        <button class="progress-button" id="progressOpenButton" type="button">
-          Прогресс и задания
-          <span class="progress-dot" id="progressDot">3</span>
-        </button>
-      </div>
-
-      <div class="tabs">
-        <button class="tab active" type="button" data-tab="global">Общий</button>
-        <button class="tab" type="button" data-tab="local">На устройстве</button>
-      </div>
-
+      <div class="profile-mini"><div><span>Рекорд</span><strong id="profileBest">0</strong></div><div><span>Раундов</span><strong id="profileRounds">0</strong></div><div><span>Серия</span><strong id="profileCombo">0×</strong></div></div>
+      <div class="progress-card"><div class="progress-top"><strong class="level-badge" id="levelBadge">Уровень 1</strong><span class="xp-text" id="xpText">0 / 300 XP</span></div><div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div><button class="progress-button" id="progressOpenButton" type="button">Прогресс и задания <span class="progress-dot" id="progressDot">3</span></button></div>
+      <div class="tabs"><button class="tab active" type="button" data-tab="global">Общий</button><button class="tab" type="button" data-tab="local">На устройстве</button></div>
       <div class="scores" id="scores"></div>
     </aside>
   </div>
 
   <div class="progress-modal" id="progressModal" aria-hidden="true">
     <div class="progress-window" role="dialog" aria-modal="true" aria-labelledby="progressTitle">
-      <div class="progress-header">
-        <div>
-          <div class="eyebrow">Fair Play Update 1.4</div>
-          <h2 id="progressTitle">Профиль игрока</h2>
-        </div>
-        <button class="progress-close" id="progressCloseButton" type="button" aria-label="Закрыть">✕</button>
+      <div class="progress-header"><div><div class="eyebrow">Training Lab Update 1.5</div><h2 id="progressTitle">Профиль игрока</h2></div><button class="progress-close" id="progressCloseButton" type="button" aria-label="Закрыть">✕</button></div>
+      <div class="progress-tabs"><button class="progress-tab active" type="button" data-progress-tab="missions">Задания</button><button class="progress-tab" type="button" data-progress-tab="achievements">Достижения</button><button class="progress-tab" type="button" data-progress-tab="history">История</button></div>
+      <section class="progress-pane active" id="progressPane-missions"><div class="mission-list" id="missionList"></div></section>
+      <section class="progress-pane" id="progressPane-achievements"><div class="achievement-list" id="achievementList"></div></section>
+      <section class="progress-pane" id="progressPane-history"><div class="history-list" id="historyList"></div></section>
+    </div>
+  </div>
+
+  <div class="lab-modal" id="labModal" aria-hidden="true">
+    <div class="lab-window" role="dialog" aria-modal="true" aria-labelledby="labTitle">
+      <div class="lab-header"><div><div class="eyebrow">Training Lab 1.5</div><h2 id="labTitle">Разбор раунда</h2></div><button class="lab-close" id="labCloseButton" type="button">✕</button></div>
+      <div class="lab-score">
+        <div class="lab-card lab-primary"><strong id="labAimScore">0</strong><span>Aim Score</span></div>
+        <div class="lab-card"><strong id="labStability">0%</strong><span>Стабильность</span></div>
+        <div class="lab-card"><strong id="labBestReaction">—</strong><span>Лучшая реакция</span></div>
+        <div class="lab-card"><strong id="labWorstReaction">—</strong><span>Худшая реакция</span></div>
+        <div class="lab-card"><strong id="labMode">—</strong><span>Режим</span></div>
       </div>
-
-      <div class="progress-tabs">
-        <button class="progress-tab active" type="button" data-progress-tab="missions">Задания</button>
-        <button class="progress-tab" type="button" data-progress-tab="achievements">Достижения</button>
-        <button class="progress-tab" type="button" data-progress-tab="history">История</button>
+      <div class="lab-grid">
+        <section class="lab-panel"><h3>Реакция по ходу раунда</h3><canvas class="lab-canvas" id="reactionCanvas"></canvas></section>
+        <section class="lab-panel"><h3>Карта попаданий и промахов</h3><canvas class="lab-canvas" id="heatCanvas"></canvas></section>
       </div>
-
-      <section class="progress-pane active" id="progressPane-missions">
-        <div class="mission-list" id="missionList"></div>
-      </section>
-
-      <section class="progress-pane" id="progressPane-achievements">
-        <div class="achievement-list" id="achievementList"></div>
-      </section>
-
-      <section class="progress-pane" id="progressPane-history">
-        <div class="history-list" id="historyList"></div>
-      </section>
+      <div class="lab-recommendation" id="labRecommendation"></div>
     </div>
   </div>
 </body>
